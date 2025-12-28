@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  resident: one
+  room: one
+  incident_type: MyString
+  title: MyString
+  description: MyText
+  occurred_on: 2025-12-28
+  resolved_on: 2025-12-28
+  status: MyString
+
+two:
+  resident: two
+  room: two
+  incident_type: MyString
+  title: MyString
+  description: MyText
+  occurred_on: 2025-12-28
+  resolved_on: 2025-12-28
+  status: MyString
