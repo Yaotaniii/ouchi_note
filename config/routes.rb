@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   resources :payments
   resources :maintenance_records
   resources :parking_spaces, only: [:index, :edit, :update]
+  resources :bicycle_registrations
+  resources :motorcycle_registrations
 
   get "up" => "rails/health#show", as: :rails_health_check
 end

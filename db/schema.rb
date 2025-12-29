@@ -10,11 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_28_050658) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_29_122900) do
   create_table "bicycle_registrations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "resident_id", null: false
     t.string "registration_number", null: false
-    t.integer "bicycle_count", default: 1
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["registration_number"], name: "index_bicycle_registrations_on_registration_number", unique: true

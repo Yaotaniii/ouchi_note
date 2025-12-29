@@ -1,0 +1,44 @@
+<h1 class="page-title">駐輪場管理</h1>
+
+<div class="action-bar">
+  <div>
+    <p>登録数：<%= @bicycle_registrations.count %>台</p>
+  </div>
+  <div class="action-bar-right">
+    <% if current_user.owner? %>
+      <%= link_to "新規登録", new_bicycle_registration_path, class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
+
+<% if @bicycle_registrations.any? %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>駐輪証番号</th>
+        <th>部屋番号</th>
+        <th>住民名</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @bicycle_registrations.each do |registration| %>
+        <tr>
+          <td><%= registration.registration_number %></td>
+          <td><%= registration.resident.room.room_number %></td>
+          <td><%= registration.resident.name %></td>
+          <td class="actions">
+            <% if current_user.owner? %>
+              <%= link_to "編集", edit_bicycle_registration_path(registration), class: "btn btn-secondary btn-small" %>
+              <%= button_to "削除", bicycle_registration_path(registration), method: :delete, class: "btn btn-danger btn-small", form_class: "btn-delete-form", data: { turbo_confirm: "本当に削除しますか？" } %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="card">
+    <p>駐輪場の登録はありません</p>
+  </div>
+<% end %>

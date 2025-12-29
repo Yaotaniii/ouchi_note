@@ -1,0 +1,27 @@
+<%= form_with model: bicycle_registration do |f| %>
+  <% if bicycle_registration.errors.any? %>
+    <div class="error-messages">
+      <p><%= bicycle_registration.errors.count %>件のエラーがあります</p>
+      <ul>
+        <% bicycle_registration.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :resident_id, "住民" %>
+    <%= f.collection_select :resident_id, Resident.includes(:room).where(move_out_date: nil).order("rooms.room_number"), :id, ->(r) { "#{r.room.room_number} - #{r.name}" }, { prompt: "選択してください" }, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :registration_number, "駐輪証番号" %>
+    <%= f.text_field :registration_number, class: "form-control" %>
+  </div>
+
+  <div class="action-bar">
+    <%= link_to "キャンセル", bicycle_registrations_path, class: "btn btn-secondary" %>
+    <%= f.submit class: "btn btn-primary", data: { turbo_confirm: "この内容で保存しますか？" } %>
+  </div>
+<% end %>
