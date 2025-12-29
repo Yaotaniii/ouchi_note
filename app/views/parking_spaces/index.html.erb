@@ -1,46 +1,85 @@
 <h1 class="page-title">駐車場管理</h1>
 
 <div class="card">
-  <p>全 <%= @parking_spaces.count %> 台分</p>
+  <h2 class="card-title">駐車場マップ</h2>
+  <div class="parking-map">
+    <% @parking_spaces.each do |space| %>
+      <div class="parking-space <%= space.resident.present? || space.owner_use? ? 'occupied' : 'available' %>">
+        <div class="space-number"><%= space.space_number %></div>
+        <div class="space-status">
+          <% if space.owner_use? %>
+            <span class="status-icon">👑</span>
+            <span class="status-text">オーナー</span>
+          <% elsif space.resident.present? %>
+            <span class="status-icon">🚗</span>
+            <span class="status-text"><%= space.resident.room.room_number %></span>
+          <% else %>
+            <span class="status-icon">○</span>
+            <span class="status-text">空き</span>
+          <% end %>
+        </div>
+        <% if current_user.owner? %>
+          <%= link_to "編集", edit_parking_space_path(space), class: "space-edit-link" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  
+  <div class="parking-legend">
+    <div class="legend-item">
+      <span class="legend-color occupied"></span>
+      <span>使用中</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-color available"></span>
+      <span>空き</span>
+    </div>
+    <div class="legend-item">
+      <span>👑 オーナー使用</span>
+    </div>
+  </div>
 </div>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>区画番号</th>
-      <th>使用区分</th>
-      <th>使用者</th>
-      <th>備考</th>
-      <th>操作</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @parking_spaces.each do |space| %>
+<div class="card">
+  <h2 class="card-title">詳細一覧</h2>
+  <table class="table">
+    <thead>
       <tr>
-        <td><%= space.space_number %></td>
-        <td>
-          <% if space.owner_use? %>
-            <span class="badge badge-occupied">オーナー</span>
-          <% else %>
-            <span class="badge badge-vacant">入居者用</span>
-          <% end %>
-        </td>
-        <td>
-          <% if space.owner_use? %>
-            オーナー使用
-          <% elsif space.resident.present? %>
-            <%= space.resident.room.room_number %> - <%= space.resident.name %>
-          <% else %>
-            <span style="color: #999;">空き</span>
-          <% end %>
-        </td>
-        <td><%= space.notes %></td>
-        <td class="actions">
-          <% if current_user.owner? %>
-            <%= link_to "編集", edit_parking_space_path(space), class: "btn btn-secondary btn-small" %>
-          <% end %>
-        </td>
+        <th>区画番号</th>
+        <th>使用区分</th>
+        <th>使用者</th>
+        <th>備考</th>
+        <th>操作</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @parking_spaces.each do |space| %>
+        <tr>
+          <td><%= space.space_number %></td>
+          <td>
+            <% if space.owner_use? %>
+              <span class="badge badge-occupied">オーナー</span>
+            <% else %>
+              <span class="badge badge-vacant">入居者用</span>
+            <% end %>
+          </td>
+          <td>
+            <% if space.owner_use? %>
+              オーナー使用
+            <% elsif space.resident.present? %>
+              <%= space.resident.room.room_number %> - <%= space.resident.name %>
+            <% else %>
+              <span style="color: #999;">空き</span>
+            <% end %>
+          </td>
+          <td><%= space.notes %></td>
+          <td class="actions">
+            <% if current_user.owner? %>
+              <%= link_to "編集", edit_parking_space_path(space), class: "btn btn-secondary btn-small" %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
