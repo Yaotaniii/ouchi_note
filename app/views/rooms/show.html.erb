@@ -1,0 +1,39 @@
+<h1 class="page-title">部屋詳細：<%= @room.room_number %></h1>
+
+<div class="card">
+  <table class="detail-table">
+    <tr>
+      <th>部屋番号</th>
+      <td><%= @room.room_number %></td>
+    </tr>
+    <tr>
+      <th>間取り</th>
+      <td><%= @room.floor_plan %></td>
+    </tr>
+    <tr>
+      <th>家賃</th>
+      <td><%= number_with_delimiter(@room.rent) %>円</td>
+    </tr>
+    <tr>
+      <th>状態</th>
+      <td>
+        <% if @room.status == 'occupied' %>
+          <span class="badge badge-occupied">入居中</span>
+        <% else %>
+          <span class="badge badge-vacant">空室</span>
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <th>備考</th>
+      <td><%= @room.notes.presence || "なし" %></td>
+    </tr>
+  </table>
+</div>
+
+<div class="action-bar">
+  <%= link_to "一覧に戻る", rooms_path, class: "btn btn-secondary" %>
+  <% if current_user.owner? %>
+    <%= link_to "編集", edit_room_path(@room), class: "btn btn-primary" %>
+  <% end %>
+</div>

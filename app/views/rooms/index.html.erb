@@ -1,0 +1,45 @@
+<h1 class="page-title">部屋一覧</h1>
+
+<div class="action-bar">
+  <div></div>
+  <div class="action-bar-right">
+    <% if current_user.owner? %>
+      <%= link_to "新規作成", new_room_path, class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>部屋番号</th>
+      <th>間取り</th>
+      <th>家賃</th>
+      <th>状態</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @rooms.each do |room| %>
+      <tr>
+        <td><%= room.room_number %></td>
+        <td><%= room.floor_plan %></td>
+        <td><%= number_with_delimiter(room.rent) %>円</td>
+        <td>
+          <% if room.status == 'occupied' %>
+            <span class="badge badge-occupied">入居中</span>
+          <% else %>
+            <span class="badge badge-vacant">空室</span>
+          <% end %>
+        </td>
+        <td class="actions">
+          <%= link_to "詳細", room_path(room), class: "btn btn-secondary btn-small" %>
+          <% if current_user.owner? %>
+            <%= link_to "編集", edit_room_path(room), class: "btn btn-secondary btn-small" %>
+            <%= button_to "削除", room_path(room), method: :delete, class: "btn btn-danger btn-small", form_class: "btn-delete-form", data: { turbo_confirm: "本当に削除しますか？" } %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

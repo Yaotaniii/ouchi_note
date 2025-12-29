@@ -4,5 +4,7 @@ Rails.application.routes.draw do
   get "dashboard", to: "dashboard#index"
   root "dashboard#index"
 
+  resources :rooms
+
   get "up" => "rails/health#show", as: :rails_health_check
 end

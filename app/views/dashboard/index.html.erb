@@ -1,11 +1,27 @@
-<h1>おうちノート</h1>
+<h1 class="page-title">ダッシュボード</h1>
 
-<p>ようこそ、<%= current_user.name %>さん（<%= current_user.role %>）</p>
+<div class="dashboard-cards">
+  <div class="dashboard-card">
+    <div class="number"><%= Room.count %></div>
+    <div class="label">総部屋数</div>
+  </div>
+  <div class="dashboard-card">
+    <div class="number"><%= Room.where(status: 'occupied').count %></div>
+    <div class="label">入居中</div>
+  </div>
+  <div class="dashboard-card">
+    <div class="number"><%= Room.where(status: 'vacant').count %></div>
+    <div class="label">空室</div>
+  </div>
+  <div class="dashboard-card">
+    <div class="number"><%= Resident.where(move_out_date: nil).count %></div>
+    <div class="label">現入居者数</div>
+  </div>
+</div>
 
-<%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete } %>
-
-<hr>
-
-<h2>ダッシュボード</h2>
-
-<p>ここに各種情報を表示していきます</p>
+<div class="card">
+  <h2 class="card-title">クイックリンク</h2>
+  <p>
+    <%= link_to "部屋一覧", rooms_path, class: "btn btn-primary" %>
+  </p>
+</div>
