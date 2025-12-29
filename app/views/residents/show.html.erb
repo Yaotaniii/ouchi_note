@@ -1,6 +1,7 @@
 <h1 class="page-title">住民詳細：<%= @resident.name %></h1>
 
 <div class="card">
+  <h2 class="card-title">基本情報</h2>
   <table class="detail-table">
     <tr>
       <th>部屋番号</th>
@@ -49,6 +50,41 @@
       <td><%= @resident.notes.presence || "なし" %></td>
     </tr>
   </table>
+</div>
+
+<div class="card">
+  <h2 class="card-title">契約情報</h2>
+  <% if @resident.contract.present? %>
+    <table class="detail-table">
+      <tr>
+        <th>契約開始日</th>
+        <td><%= @resident.contract.start_date.strftime("%Y/%m/%d") %></td>
+      </tr>
+      <tr>
+        <th>敷金</th>
+        <td><%= number_with_delimiter(@resident.contract.deposit) %>円</td>
+      </tr>
+      <tr>
+        <th>礼金</th>
+        <td><%= number_with_delimiter(@resident.contract.key_money) %>円</td>
+      </tr>
+      <tr>
+        <th>保証人</th>
+        <td><%= @resident.contract.guarantor_name.presence || "未登録" %></td>
+      </tr>
+    </table>
+    <p style="margin-top: 15px;">
+      <%= link_to "契約詳細を見る", resident_contract_path(@resident), class: "btn btn-secondary btn-small" %>
+      <% if current_user.owner? %>
+        <%= link_to "契約を編集", edit_resident_contract_path(@resident), class: "btn btn-secondary btn-small" %>
+      <% end %>
+    </p>
+  <% else %>
+    <p>契約情報が登録されていません。</p>
+    <% if current_user.owner? %>
+      <p><%= link_to "契約情報を登録", new_resident_contract_path(@resident), class: "btn btn-primary" %></p>
+    <% end %>
+  <% end %>
 </div>
 
 <div class="action-bar">

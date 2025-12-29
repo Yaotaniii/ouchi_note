@@ -5,7 +5,9 @@ Rails.application.routes.draw do
   root "dashboard#index"
 
   resources :rooms
-  resources :residents
+  resources :residents do
+    resource :contract, only: [:show, :new, :create, :edit, :update, :destroy]
+  end
 
   get "up" => "rails/health#show", as: :rails_health_check
 end

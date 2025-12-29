@@ -1,0 +1,62 @@
+<%= form_with model: contract, url: resident_contract_path(@resident) do |f| %>
+  <% if contract.errors.any? %>
+    <div class="error-messages">
+      <p><%= contract.errors.count %>件のエラーがあります</p>
+      <ul>
+        <% contract.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :start_date, "契約開始日" %>
+    <%= f.date_field :start_date, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :end_date, "契約終了日" %>
+    <%= f.date_field :end_date, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :deposit, "敷金" %>
+    <%= f.number_field :deposit, class: "form-control", min: 0 %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :key_money, "礼金" %>
+    <%= f.number_field :key_money, class: "form-control", min: 0 %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :deposit_returned, "退去時返金額" %>
+    <%= f.number_field :deposit_returned, class: "form-control", min: 0 %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :guarantor_name, "保証人氏名" %>
+    <%= f.text_field :guarantor_name, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :guarantor_phone, "保証人電話番号" %>
+    <%= f.text_field :guarantor_phone, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :guarantor_address, "保証人住所" %>
+    <%= f.text_field :guarantor_address, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :notes, "備考" %>
+    <%= f.text_area :notes, class: "form-control" %>
+  </div>
+
+  <div class="action-bar">
+    <%= link_to "キャンセル", resident_path(@resident), class: "btn btn-secondary" %>
+    <%= f.submit class: "btn btn-primary", data: { turbo_confirm: "この内容で保存しますか？" } %>
+  </div>
+<% end %>

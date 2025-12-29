@@ -1,0 +1,49 @@
+<h1 class="page-title">契約詳細：<%= @resident.name %>さん</h1>
+
+<div class="card">
+  <table class="detail-table">
+    <tr>
+      <th>契約開始日</th>
+      <td><%= @contract.start_date.strftime("%Y/%m/%d") %></td>
+    </tr>
+    <tr>
+      <th>契約終了日</th>
+      <td><%= @contract.end_date&.strftime("%Y/%m/%d") || "未定" %></td>
+    </tr>
+    <tr>
+      <th>敷金</th>
+      <td><%= number_with_delimiter(@contract.deposit) %>円</td>
+    </tr>
+    <tr>
+      <th>礼金</th>
+      <td><%= number_with_delimiter(@contract.key_money) %>円</td>
+    </tr>
+    <tr>
+      <th>退去時返金額</th>
+      <td><%= @contract.deposit_returned ? "#{number_with_delimiter(@contract.deposit_returned)}円" : "未精算" %></td>
+    </tr>
+    <tr>
+      <th>保証人氏名</th>
+      <td><%= @contract.guarantor_name.presence || "未登録" %></td>
+    </tr>
+    <tr>
+      <th>保証人電話番号</th>
+      <td><%= @contract.guarantor_phone.presence || "未登録" %></td>
+    </tr>
+    <tr>
+      <th>保証人住所</th>
+      <td><%= @contract.guarantor_address.presence || "未登録" %></td>
+    </tr>
+    <tr>
+      <th>備考</th>
+      <td><%= @contract.notes.presence || "なし" %></td>
+    </tr>
+  </table>
+</div>
+
+<div class="action-bar">
+  <%= link_to "住民詳細に戻る", resident_path(@resident), class: "btn btn-secondary" %>
+  <% if current_user.owner? %>
+    <%= link_to "編集", edit_resident_contract_path(@resident), class: "btn btn-primary" %>
+  <% end %>
+</div>
