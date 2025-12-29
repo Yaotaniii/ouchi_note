@@ -14,18 +14,37 @@
       <header class="header">
         <h1>🏠 おうちノート</h1>
         <nav class="header-nav">
-          <span class="user-info"><%= current_user.name %>さん（<%= current_user.owner? ? 'オーナー' : 'スタッフ' %>）</span>
           <%= link_to "ダッシュボード", dashboard_path %>
-          <%= link_to "部屋", rooms_path %>
-          <%= link_to "住民", residents_path %>
-          <%= link_to "入金", payments_path %>
-          <%= link_to "修繕", maintenance_records_path %>
-          <%= link_to "駐車場", parking_spaces_path %>
-          <%= link_to "駐輪場", bicycle_registrations_path %>
-          <%= link_to "バイク", motorcycle_registrations_path %>
-          <%= link_to "車両", vehicles_path %>
+
+          <div class="dropdown">
+            <span class="dropdown-toggle">物件管理</span>
+            <div class="dropdown-menu">
+              <%= link_to "部屋一覧", rooms_path %>
+              <%= link_to "住民一覧", residents_path %>
+              <%= link_to "入金管理", payments_path %>
+              <%= link_to "修繕履歴", maintenance_records_path %>
+            </div>
+          </div>
+
+          <div class="dropdown">
+            <span class="dropdown-toggle">駐車・駐輪</span>
+            <div class="dropdown-menu">
+              <%= link_to "駐車場", parking_spaces_path %>
+              <%= link_to "駐輪場", bicycle_registrations_path %>
+              <%= link_to "バイク置場", motorcycle_registrations_path %>
+              <%= link_to "車両情報", vehicles_path %>
+            </div>
+          </div>
+
           <%= link_to "対応履歴", incidents_path %>
-          <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete } %>
+
+          <div class="dropdown">
+            <span class="dropdown-toggle"><%= current_user.name %>さん</span>
+            <div class="dropdown-menu dropdown-menu-right">
+              <span class="dropdown-item-text"><%= current_user.owner? ? 'オーナー' : 'スタッフ' %></span>
+              <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete } %>
+            </div>
+          </div>
         </nav>
       </header>
     <% end %>
