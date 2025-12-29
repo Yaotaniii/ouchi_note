@@ -8,6 +8,7 @@ class Room < ApplicationRecord
 
   validates :room_number, presence: true, uniqueness: true
   validates :status, presence: true, inclusion: { in: %w[vacant occupied] }
+  validates :rent, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
   def current_resident
     residents.where(move_out_date: nil).order(move_in_date: :desc).first

@@ -1,15 +1,1 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  room_number: MyString
-  floor_plan: MyString
-  rent: 1
-  status: MyString
-  notes: MyText
-
-two:
-  room_number: MyString
-  floor_plan: MyString
-  rent: 1
-  status: MyString
-  notes: MyText
+# empty

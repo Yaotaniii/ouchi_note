@@ -1,13 +1,1 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  space_number: MyString
-  user_type: MyString
-  resident: one
-  notes: MyText
-
-two:
-  space_number: MyString
-  user_type: MyString
-  resident: two
-  notes: MyText
+# empty
