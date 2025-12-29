@@ -652,3 +652,67 @@ textarea.form-control {
   background-color: #e8f5e9;
   border-color: #a5d6a7;
 }
+
+/* ===== ログイン画面 ===== */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4a90a4 0%, #357a8c 100%);
+  padding: 20px;
+}
+
+.login-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.login-header h1 {
+  color: #4a90a4;
+  font-size: 1.8rem;
+  margin-bottom: 5px;
+}
+
+.login-header p {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.login-card .form-group {
+  margin-bottom: 20px;
+}
+
+.login-card .form-control {
+  padding: 12px;
+  font-size: 1rem;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.remember-me label {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #6c757d;
+  cursor: pointer;
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  font-size: 1.1rem;
+}
