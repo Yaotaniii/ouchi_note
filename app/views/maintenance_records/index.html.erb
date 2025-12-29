@@ -1,0 +1,49 @@
+<h1 class="page-title">修繕履歴</h1>
+
+<div class="action-bar">
+  <div>
+    <%= form_with url: maintenance_records_path, method: :get, local: true, class: "filter-form" do %>
+      <%= select_tag :room_id, options_from_collection_for_select(Room.order(:room_number), :id, :room_number, params[:room_id]), prompt: "全ての部屋", class: "form-control", onchange: "this.form.submit();" %>
+    <% end %>
+  </div>
+  <div class="action-bar-right">
+    <% if current_user.owner? %>
+      <%= link_to "新規登録", new_maintenance_record_path, class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
+
+<% if @maintenance_records.any? %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>実施日</th>
+        <th>部屋番号</th>
+        <th>タイトル</th>
+        <th>費用</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @maintenance_records.each do |record| %>
+        <tr>
+          <td><%= record.performed_on.strftime("%Y/%m/%d") %></td>
+          <td><%= record.room.room_number %></td>
+          <td><%= record.title %></td>
+          <td><%= number_with_delimiter(record.cost) %>円</td>
+          <td class="actions">
+            <%= link_to "詳細", maintenance_record_path(record), class: "btn btn-secondary btn-small" %>
+            <% if current_user.owner? %>
+              <%= link_to "編集", edit_maintenance_record_path(record), class: "btn btn-secondary btn-small" %>
+              <%= button_to "削除", maintenance_record_path(record), method: :delete, class: "btn btn-danger btn-small", form_class: "btn-delete-form", data: { turbo_confirm: "本当に削除しますか？" } %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="card">
+    <p>修繕履歴はありません</p>
+  </div>
+<% end %>

@@ -319,3 +319,13 @@ textarea.form-control {
   display: flex;
   gap: 10px;
 }
+
+/* ===== フィルターフォーム ===== */
+.filter-form {
+  display: inline-block;
+}
+
+.filter-form .form-control {
+  width: auto;
+  display: inline-block;
+}

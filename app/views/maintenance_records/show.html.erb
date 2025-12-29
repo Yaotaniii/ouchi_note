@@ -1,0 +1,33 @@
+<h1 class="page-title">修繕履歴詳細</h1>
+
+<div class="card">
+  <table class="detail-table">
+    <tr>
+      <th>部屋番号</th>
+      <td><%= link_to @maintenance_record.room.room_number, room_path(@maintenance_record.room) %></td>
+    </tr>
+    <tr>
+      <th>タイトル</th>
+      <td><%= @maintenance_record.title %></td>
+    </tr>
+    <tr>
+      <th>実施日</th>
+      <td><%= @maintenance_record.performed_on.strftime("%Y/%m/%d") %></td>
+    </tr>
+    <tr>
+      <th>費用</th>
+      <td><%= number_with_delimiter(@maintenance_record.cost) %>円</td>
+    </tr>
+    <tr>
+      <th>詳細</th>
+      <td><%= simple_format(@maintenance_record.description) if @maintenance_record.description.present? %></td>
+    </tr>
+  </table>
+</div>
+
+<div class="action-bar">
+  <%= link_to "一覧に戻る", maintenance_records_path, class: "btn btn-secondary" %>
+  <% if current_user.owner? %>
+    <%= link_to "編集", edit_maintenance_record_path(@maintenance_record), class: "btn btn-primary" %>
+  <% end %>
+</div>
