@@ -1,0 +1,47 @@
+<%= form_with model: payment do |f| %>
+  <% if payment.errors.any? %>
+    <div class="error-messages">
+      <p><%= payment.errors.count %>件のエラーがあります</p>
+      <ul>
+        <% payment.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :resident_id, "住民" %>
+    <%= f.collection_select :resident_id, Resident.includes(:room).where(move_out_date: nil).order("rooms.room_number"), :id, ->(r) { "#{r.room.room_number} - #{r.name}" }, { prompt: "選択してください" }, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :year_month, "対象年月" %>
+    <%= f.month_field :year_month, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :amount, "金額" %>
+    <%= f.number_field :amount, class: "form-control", min: 0 %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :status, "状態" %>
+    <%= f.select :status, [["入金済み", "paid"], ["未入金", "unpaid"]], {}, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :paid_on, "入金日" %>
+    <%= f.date_field :paid_on, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :notes, "備考" %>
+    <%= f.text_area :notes, class: "form-control" %>
+  </div>
+
+  <div class="action-bar">
+    <%= link_to "キャンセル", payments_path(year_month: payment.year_month), class: "btn btn-secondary" %>
+    <%= f.submit class: "btn btn-primary", data: { turbo_confirm: "この内容で保存しますか？" } %>
+  </div>
+<% end %>

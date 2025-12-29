@@ -1,0 +1,98 @@
+<h1 class="page-title">入金管理：<%= @year_month %></h1>
+
+<div class="action-bar">
+  <div class="month-nav">
+    <% prev_month = (Date.parse(@year_month + "-01") - 1.month).strftime("%Y-%m") %>
+    <% next_month = (Date.parse(@year_month + "-01") + 1.month).strftime("%Y-%m") %>
+    <%= link_to "前月", payments_path(year_month: prev_month), class: "btn btn-secondary btn-small" %>
+    <%= link_to "今月", payments_path, class: "btn btn-secondary btn-small" %>
+    <%= link_to "翌月", payments_path(year_month: next_month), class: "btn btn-secondary btn-small" %>
+  </div>
+  <div class="action-bar-right">
+    <% if current_user.owner? %>
+      <%= link_to "新規登録", new_payment_path(year_month: @year_month), class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
+
+<div class="card">
+  <h2 class="card-title">入金済み</h2>
+  <% paid_payments = @payments.select(&:paid?) %>
+  <% if paid_payments.any? %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>部屋番号</th>
+          <th>氏名</th>
+          <th>金額</th>
+          <th>入金日</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% paid_payments.each do |payment| %>
+          <tr>
+            <td><%= payment.resident.room.room_number %></td>
+            <td><%= payment.resident.name %></td>
+            <td><%= number_with_delimiter(payment.amount) %>円</td>
+            <td><%= payment.paid_on&.strftime("%Y/%m/%d") %></td>
+            <td class="actions">
+              <% if current_user.owner? %>
+                <%= link_to "編集", edit_payment_path(payment), class: "btn btn-secondary btn-small" %>
+                <%= button_to "削除", payment_path(payment), method: :delete, class: "btn btn-danger btn-small", form_class: "btn-delete-form", data: { turbo_confirm: "本当に削除しますか？" } %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>入金済みの記録はありません</p>
+  <% end %>
+</div>
+
+<div class="card">
+  <h2 class="card-title">未入金</h2>
+  <% unpaid_payments = @payments.select(&:unpaid?) %>
+  <% if unpaid_payments.any? || @residents_without_payment.any? %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>部屋番号</th>
+          <th>氏名</th>
+          <th>状態</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% unpaid_payments.each do |payment| %>
+          <tr>
+            <td><%= payment.resident.room.room_number %></td>
+            <td><%= payment.resident.name %></td>
+            <td><span class="badge badge-vacant">未入金（記録あり）</span></td>
+            <td class="actions">
+              <% if current_user.owner? %>
+                <%= link_to "編集", edit_payment_path(payment), class: "btn btn-secondary btn-small" %>
+                <%= button_to "削除", payment_path(payment), method: :delete, class: "btn btn-danger btn-small", form_class: "btn-delete-form", data: { turbo_confirm: "本当に削除しますか？" } %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+        <% @residents_without_payment.each do |resident| %>
+          <tr>
+            <td><%= resident.room.room_number %></td>
+            <td><%= resident.name %></td>
+            <td><span class="badge badge-vacant">未登録</span></td>
+            <td class="actions">
+              <% if current_user.owner? %>
+                <%= link_to "入金登録", new_payment_path(year_month: @year_month, resident_id: resident.id), class: "btn btn-primary btn-small" %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>未入金の住民はいません</p>
+  <% end %>
+</div>

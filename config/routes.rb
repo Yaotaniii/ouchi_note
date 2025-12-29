@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :residents do
     resource :contract, only: [:show, :new, :create, :edit, :update, :destroy]
   end
+  resources :payments
 
   get "up" => "rails/health#show", as: :rails_health_check
 end

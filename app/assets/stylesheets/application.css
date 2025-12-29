@@ -313,3 +313,9 @@ textarea.form-control {
 .btn-delete-form .btn {
   margin: 0;
 }
+
+/* ===== 月ナビゲーション ===== */
+.month-nav {
+  display: flex;
+  gap: 10px;
+}

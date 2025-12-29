@@ -5,6 +5,7 @@ class Payment < ApplicationRecord
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :status, presence: true, inclusion: { in: %w[paid unpaid] }
   validates :resident_id, uniqueness: { scope: :year_month, message: 'この月の入金記録は既に存在します' }
+  validates :paid_on, presence: true, if: :paid?
 
   def paid?
     status == 'paid'
