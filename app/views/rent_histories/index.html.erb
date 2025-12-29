@@ -1,0 +1,50 @@
+<h1 class="page-title">家賃改定履歴：<%= @room.room_number %></h1>
+
+<div class="card">
+  <p>現在の家賃：<strong><%= number_with_delimiter(@room.rent) %>円</strong></p>
+</div>
+
+<div class="action-bar">
+  <div></div>
+  <div class="action-bar-right">
+    <% if current_user.owner? %>
+      <%= link_to "家賃改定を登録", new_room_rent_history_path(@room), class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
+
+<% if @rent_histories.any? %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>適用開始日</th>
+        <th>家賃</th>
+        <th>備考</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @rent_histories.each do |history| %>
+        <tr>
+          <td><%= history.started_on.strftime("%Y/%m/%d") %></td>
+          <td><%= number_with_delimiter(history.rent) %>円</td>
+          <td><%= history.notes %></td>
+          <td class="actions">
+            <% if current_user.owner? %>
+              <%= link_to "編集", edit_room_rent_history_path(@room, history), class: "btn btn-secondary btn-small" %>
+              <%= button_to "削除", room_rent_history_path(@room, history), method: :delete, class: "btn btn-danger btn-small", form_class: "btn-delete-form", data: { turbo_confirm: "本当に削除しますか？" } %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="card">
+    <p>家賃改定履歴はありません</p>
+  </div>
+<% end %>
+
+<div class="action-bar">
+  <%= link_to "部屋詳細に戻る", room_path(@room), class: "btn btn-secondary" %>
+</div>

@@ -1,0 +1,40 @@
+<h1 class="page-title">家賃改定を登録：<%= @room.room_number %></h1>
+
+<div class="card">
+  <p>現在の家賃：<strong><%= number_with_delimiter(@room.rent) %>円</strong></p>
+</div>
+
+<div class="card">
+  <%= form_with model: [@room, @rent_history] do |f| %>
+    <% if @rent_history.errors.any? %>
+      <div class="error-messages">
+        <p><%= @rent_history.errors.count %>件のエラーがあります</p>
+        <ul>
+          <% @rent_history.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= f.label :rent, "新しい家賃" %>
+      <%= f.number_field :rent, class: "form-control", min: 0 %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :started_on, "適用開始日" %>
+      <%= f.date_field :started_on, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :notes, "備考" %>
+      <%= f.text_area :notes, class: "form-control", placeholder: "例：更新時に改定" %>
+    </div>
+
+    <div class="action-bar">
+      <%= link_to "キャンセル", room_rent_histories_path(@room), class: "btn btn-secondary" %>
+      <%= f.submit "登録", class: "btn btn-primary", data: { turbo_confirm: "この内容で登録しますか？" } %>
+    </div>
+  <% end %>
+</div>

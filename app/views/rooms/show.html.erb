@@ -12,7 +12,10 @@
     </tr>
     <tr>
       <th>家賃</th>
-      <td><%= number_with_delimiter(@room.rent) %>円</td>
+      <td>
+        <%= number_with_delimiter(@room.rent) %>円
+        <%= link_to "改定履歴", room_rent_histories_path(@room), class: "btn btn-secondary btn-small", style: "margin-left: 10px;" %>
+      </td>
     </tr>
     <tr>
       <th>状態</th>

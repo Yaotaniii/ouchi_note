@@ -4,7 +4,9 @@ Rails.application.routes.draw do
   get "dashboard", to: "dashboard#index"
   root "dashboard#index"
 
-  resources :rooms
+  resources :rooms do
+    resources :rent_histories, only: [:index, :new, :create, :edit, :update, :destroy]
+  end
   resources :residents do
     resource :contract, only: [:show, :new, :create, :edit, :update, :destroy]
   end
