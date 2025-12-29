@@ -1,27 +1,159 @@
 <h1 class="page-title">ダッシュボード</h1>
 
+<!-- サマリーカード -->
 <div class="dashboard-cards">
   <div class="dashboard-card">
-    <div class="number"><%= Room.count %></div>
+    <div class="number"><%= @total_rooms %></div>
     <div class="label">総部屋数</div>
   </div>
   <div class="dashboard-card">
-    <div class="number"><%= Room.where(status: 'occupied').count %></div>
+    <div class="number"><%= @occupied_rooms %></div>
     <div class="label">入居中</div>
   </div>
   <div class="dashboard-card">
-    <div class="number"><%= Room.where(status: 'vacant').count %></div>
+    <div class="number"><%= @vacant_rooms %></div>
     <div class="label">空室</div>
   </div>
   <div class="dashboard-card">
-    <div class="number"><%= Resident.where(move_out_date: nil).count %></div>
+    <div class="number"><%= @current_residents %></div>
     <div class="label">現入居者数</div>
   </div>
 </div>
 
-<div class="card">
-  <h2 class="card-title">クイックリンク</h2>
-  <p>
-    <%= link_to "部屋一覧", rooms_path, class: "btn btn-primary" %>
-  </p>
+<!-- 今月の入金状況 -->
+<div class="dashboard-section">
+  <h2 class="section-title">今月の入金状況（<%= @current_month %>）</h2>
+  <div class="dashboard-cards">
+    <div class="dashboard-card card-success">
+      <div class="number"><%= @paid_count %></div>
+      <div class="label">入金済み</div>
+    </div>
+    <div class="dashboard-card card-warning">
+      <div class="number"><%= @unpaid_count %></div>
+      <div class="label">未入金</div>
+    </div>
+  </div>
+  <%= link_to "入金管理へ", payments_path, class: "btn btn-secondary btn-small" %>
 </div>
+
+<!-- 滞納アラート -->
+<% if @delinquent_payments.any? %>
+  <div class="dashboard-section alert-section">
+    <h2 class="section-title">⚠️ 滞納アラート</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>対象月</th>
+          <th>部屋番号</th>
+          <th>入居者名</th>
+          <th>金額</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @delinquent_payments.each do |payment| %>
+          <tr>
+            <td><%= payment.year_month %></td>
+            <td><%= payment.resident.room.room_number %></td>
+            <td><%= payment.resident.name %></td>
+            <td><%= number_with_delimiter(payment.amount) %>円</td>
+            <td>
+              <%= link_to "編集", edit_payment_path(payment), class: "btn btn-secondary btn-small" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+
+<!-- 未解決のクレーム -->
+<% if @open_incidents.any? %>
+  <div class="dashboard-section">
+    <h2 class="section-title">未解決の対応履歴</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>発生日</th>
+          <th>種別</th>
+          <th>タイトル</th>
+          <th>入居者</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @open_incidents.each do |incident| %>
+          <tr>
+            <td><%= incident.occurred_on.strftime("%Y/%m/%d") %></td>
+            <td>
+              <% case incident.incident_type %>
+              <% when 'complaint' %>
+                苦情
+              <% when 'trouble' %>
+                トラブル
+              <% when 'inquiry' %>
+                問い合わせ
+              <% else %>
+                その他
+              <% end %>
+            </td>
+            <td><%= incident.title %></td>
+            <td><%= incident.resident.room.room_number %> - <%= incident.resident.name %></td>
+            <td>
+              <%= link_to "詳細", incident_path(incident), class: "btn btn-secondary btn-small" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <%= link_to "対応履歴一覧へ", incidents_path, class: "btn btn-secondary btn-small" %>
+  </div>
+<% end %>
+
+<!-- 駐車場状況 -->
+<div class="dashboard-section">
+  <h2 class="section-title">駐車場状況</h2>
+  <div class="dashboard-cards">
+    <div class="dashboard-card">
+      <div class="number"><%= @parking_total %></div>
+      <div class="label">総台数</div>
+    </div>
+    <div class="dashboard-card">
+      <div class="number"><%= @parking_used %></div>
+      <div class="label">使用中</div>
+    </div>
+    <div class="dashboard-card">
+      <div class="number"><%= @parking_available %></div>
+      <div class="label">空き</div>
+    </div>
+  </div>
+  <%= link_to "駐車場管理へ", parking_spaces_path, class: "btn btn-secondary btn-small" %>
+</div>
+
+<!-- 最近の修繕履歴 -->
+<% if @recent_maintenance.any? %>
+  <div class="dashboard-section">
+    <h2 class="section-title">最近の修繕履歴</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>実施日</th>
+          <th>部屋番号</th>
+          <th>タイトル</th>
+          <th>費用</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @recent_maintenance.each do |record| %>
+          <tr>
+            <td><%= record.performed_on.strftime("%Y/%m/%d") %></td>
+            <td><%= record.room.room_number %></td>
+            <td><%= record.title %></td>
+            <td><%= number_with_delimiter(record.cost) %>円</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <%= link_to "修繕履歴一覧へ", maintenance_records_path, class: "btn btn-secondary btn-small" %>
+  </div>
+<% end %>

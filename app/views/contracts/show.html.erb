@@ -42,7 +42,7 @@
 </div>
 
 <div class="action-bar">
-  <%= link_to "住民詳細に戻る", resident_path(@resident), class: "btn btn-secondary" %>
+  <%= link_to "入居者詳細に戻る", resident_path(@resident), class: "btn btn-secondary" %>
   <% if current_user.owner? %>
     <%= link_to "編集", edit_resident_contract_path(@resident), class: "btn btn-primary" %>
   <% end %>

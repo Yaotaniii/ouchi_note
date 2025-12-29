@@ -17,7 +17,7 @@ class ResidentsController < ApplicationController
   def create
     @resident = Resident.new(resident_params)
     if @resident.save
-      redirect_to @resident, notice: "住民を登録しました"
+      redirect_to @resident, notice: "入居者を登録しました"
     else
       render :new, status: :unprocessable_entity
     end
@@ -28,7 +28,7 @@ class ResidentsController < ApplicationController
 
   def update
     if @resident.update(resident_params)
-      redirect_to @resident, notice: "住民情報を更新しました"
+      redirect_to @resident, notice: "入居者情報を更新しました"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -36,7 +36,7 @@ class ResidentsController < ApplicationController
 
   def destroy
     @resident.destroy
-    redirect_to residents_path, notice: "住民を削除しました"
+    redirect_to residents_path, notice: "入居者を削除しました"
   end
 
   private

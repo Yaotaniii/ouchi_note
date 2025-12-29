@@ -9,7 +9,7 @@ class PaymentsController < ApplicationController
                        .where(year_month: @year_month)
                        .order("rooms.room_number")
     
-    # 現在入居中の住民で、まだ入金記録がない人を取得
+    # 現在入居中の入居者で、まだ入金記録がない人を取得
     existing_resident_ids = @payments.pluck(:resident_id)
     @residents_without_payment = Resident.includes(:room)
                                          .where(move_out_date: nil)
@@ -24,7 +24,7 @@ class PaymentsController < ApplicationController
       status: 'paid'
     )
     
-    # 住民が指定されていれば、部屋の家賃を自動セット
+    # 入居者が指定されていれば、部屋の家賃を自動セット
     if params[:resident_id].present?
       resident = Resident.find(params[:resident_id])
       @payment.amount = resident.room.rent

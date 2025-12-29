@@ -11,7 +11,7 @@
   <% end %>
 
   <div class="form-group">
-    <%= f.label :resident_id, "住民" %>
+    <%= f.label :resident_id, "入居者" %>
     <%= f.collection_select :resident_id, Resident.includes(:room).where(move_out_date: nil).order("rooms.room_number"), :id, ->(r) { "#{r.room.room_number} - #{r.name}" }, { prompt: "選択してください" }, class: "form-control" %>
   </div>
 

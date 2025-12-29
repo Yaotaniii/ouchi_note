@@ -11,14 +11,14 @@
   <% end %>
 
   <div class="form-group">
-    <%= f.label :resident_id, "住民" %>
+    <%= f.label :resident_id, "入居者" %>
     <%= f.collection_select :resident_id, Resident.includes(:room).where(move_out_date: nil).order("rooms.room_number"), :id, ->(r) { "#{r.room.room_number} - #{r.name}" }, { prompt: "選択してください" }, class: "form-control" %>
   </div>
 
   <div class="form-group">
     <%= f.label :room_id, "関連部屋（任意）" %>
     <%= f.collection_select :room_id, Room.order(:room_number), :id, :room_number, { prompt: "選択なし", include_blank: "選択なし" }, class: "form-control" %>
-    <p class="form-hint">※住民の部屋と異なる場合のみ選択してください</p>
+    <p class="form-hint">※入居者の部屋と異なる場合のみ選択してください</p>
   </div>
 
   <div class="form-group">
