@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
-  get 'room_photos/index'
-  get 'room_photos/new'
   devise_for :users
 
   get "dashboard", to: "dashboard#index"
   root "dashboard#index"
+
+  get "help", to: "help#index"
 
   resources :rooms do
     resources :rent_histories, only: [:index, :new, :create, :edit, :update, :destroy]
