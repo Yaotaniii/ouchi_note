@@ -1,0 +1,40 @@
+<h1 class="page-title">ユーザー管理</h1>
+
+<div class="action-bar">
+  <div></div>
+  <div class="action-bar-right">
+    <%= link_to "新規作成", new_user_path, class: "btn btn-primary" %>
+  </div>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>名前</th>
+      <th>メールアドレス</th>
+      <th>権限</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.name %></td>
+        <td><%= user.email %></td>
+        <td>
+          <% if user.owner? %>
+            <span class="badge badge-occupied">オーナー</span>
+          <% else %>
+            <span class="badge badge-vacant">スタッフ</span>
+          <% end %>
+        </td>
+        <td class="actions">
+          <%= link_to "編集", edit_user_path(user), class: "btn btn-secondary btn-small" %>
+          <% if user != current_user %>
+            <%= button_to "削除", user_path(user), method: :delete, class: "btn btn-danger btn-small", form_class: "btn-delete-form", data: { turbo_confirm: "本当に削除しますか？" } %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   resources :motorcycle_registrations
   resources :vehicles
   resources :incidents
+  resources :users, only: [:index, :new, :create, :edit, :update, :destroy]
 
   get "up" => "rails/health#show", as: :rails_health_check
 end
