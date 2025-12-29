@@ -1,0 +1,68 @@
+<h1 class="page-title">対応履歴詳細</h1>
+
+<div class="card">
+  <table class="detail-table">
+    <tr>
+      <th>タイトル</th>
+      <td><%= @incident.title %></td>
+    </tr>
+    <tr>
+      <th>種別</th>
+      <td>
+        <% case @incident.incident_type %>
+        <% when 'complaint' %>
+          苦情
+        <% when 'trouble' %>
+          トラブル
+        <% when 'inquiry' %>
+          問い合わせ
+        <% else %>
+          その他
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <th>住民</th>
+      <td><%= link_to "#{@incident.resident.room.room_number} - #{@incident.resident.name}", resident_path(@incident.resident) %></td>
+    </tr>
+    <tr>
+      <th>関連部屋</th>
+      <td>
+        <% if @incident.room.present? %>
+          <%= link_to @incident.room.room_number, room_path(@incident.room) %>
+        <% else %>
+          -
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <th>発生日</th>
+      <td><%= @incident.occurred_on.strftime("%Y/%m/%d") %></td>
+    </tr>
+    <tr>
+      <th>解決日</th>
+      <td><%= @incident.resolved_on&.strftime("%Y/%m/%d") || "未解決" %></td>
+    </tr>
+    <tr>
+      <th>状態</th>
+      <td>
+        <% if @incident.open? %>
+          <span class="badge badge-vacant">未解決</span>
+        <% else %>
+          <span class="badge badge-occupied">解決済</span>
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <th>詳細</th>
+      <td><%= simple_format(@incident.description) if @incident.description.present? %></td>
+    </tr>
+  </table>
+</div>
+
+<div class="action-bar">
+  <%= link_to "一覧に戻る", incidents_path, class: "btn btn-secondary" %>
+  <% if current_user.owner? %>
+    <%= link_to "編集", edit_incident_path(@incident), class: "btn btn-primary" %>
+  <% end %>
+</div>

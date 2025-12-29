@@ -1,0 +1,72 @@
+<h1 class="page-title">クレーム・対応履歴</h1>
+
+<div class="action-bar">
+  <div>
+    <%= form_with url: incidents_path, method: :get, local: true, class: "filter-form" do %>
+      <%= select_tag :status, options_for_select([["すべて", ""], ["未解決", "open"], ["解決済", "resolved"]], params[:status]), class: "form-control", onchange: "this.form.submit();" %>
+    <% end %>
+  </div>
+  <div class="action-bar-right">
+    <% if current_user.owner? %>
+      <%= link_to "新規登録", new_incident_path, class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
+
+<div class="card">
+  <p>未解決：<%= Incident.where(status: 'open').count %>件 / 解決済：<%= Incident.where(status: 'resolved').count %>件</p>
+</div>
+
+<% if @incidents.any? %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>発生日</th>
+        <th>種別</th>
+        <th>タイトル</th>
+        <th>住民</th>
+        <th>状態</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @incidents.each do |incident| %>
+        <tr>
+          <td><%= incident.occurred_on.strftime("%Y/%m/%d") %></td>
+          <td>
+            <% case incident.incident_type %>
+            <% when 'complaint' %>
+              苦情
+            <% when 'trouble' %>
+              トラブル
+            <% when 'inquiry' %>
+              問い合わせ
+            <% else %>
+              その他
+            <% end %>
+          </td>
+          <td><%= incident.title %></td>
+          <td><%= incident.resident.room.room_number %> - <%= incident.resident.name %></td>
+          <td>
+            <% if incident.open? %>
+              <span class="badge badge-vacant">未解決</span>
+            <% else %>
+              <span class="badge badge-occupied">解決済</span>
+            <% end %>
+          </td>
+          <td class="actions">
+            <%= link_to "詳細", incident_path(incident), class: "btn btn-secondary btn-small" %>
+            <% if current_user.owner? %>
+              <%= link_to "編集", edit_incident_path(incident), class: "btn btn-secondary btn-small" %>
+              <%= button_to "削除", incident_path(incident), method: :delete, class: "btn btn-danger btn-small", form_class: "btn-delete-form", data: { turbo_confirm: "本当に削除しますか？" } %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="card">
+    <p>対応履歴はありません</p>
+  </div>
+<% end %>

@@ -1,0 +1,59 @@
+<%= form_with model: incident do |f| %>
+  <% if incident.errors.any? %>
+    <div class="error-messages">
+      <p><%= incident.errors.count %>件のエラーがあります</p>
+      <ul>
+        <% incident.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :resident_id, "住民" %>
+    <%= f.collection_select :resident_id, Resident.includes(:room).where(move_out_date: nil).order("rooms.room_number"), :id, ->(r) { "#{r.room.room_number} - #{r.name}" }, { prompt: "選択してください" }, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :room_id, "関連部屋（任意）" %>
+    <%= f.collection_select :room_id, Room.order(:room_number), :id, :room_number, { prompt: "選択なし", include_blank: "選択なし" }, class: "form-control" %>
+    <p class="form-hint">※住民の部屋と異なる場合のみ選択してください</p>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :incident_type, "種別" %>
+    <%= f.select :incident_type, [["苦情", "complaint"], ["トラブル", "trouble"], ["問い合わせ", "inquiry"], ["その他", "other"]], {}, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :title, "タイトル" %>
+    <%= f.text_field :title, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :description, "詳細" %>
+    <%= f.text_area :description, class: "form-control", rows: 5 %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :occurred_on, "発生日" %>
+    <%= f.date_field :occurred_on, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :status, "状態" %>
+    <%= f.select :status, [["未解決", "open"], ["解決済", "resolved"]], {}, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :resolved_on, "解決日" %>
+    <%= f.date_field :resolved_on, class: "form-control" %>
+    <p class="form-hint">※解決済の場合は入力してください</p>
+  </div>
+
+  <div class="action-bar">
+    <%= link_to "キャンセル", incidents_path, class: "btn btn-secondary" %>
+    <%= f.submit class: "btn btn-primary", data: { turbo_confirm: "この内容で保存しますか？" } %>
+  </div>
+<% end %>
