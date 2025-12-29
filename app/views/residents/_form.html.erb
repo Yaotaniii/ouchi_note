@@ -1,0 +1,72 @@
+<%= form_with model: resident do |f| %>
+  <% if resident.errors.any? %>
+    <div class="error-messages">
+      <p><%= resident.errors.count %>件のエラーがあります</p>
+      <ul>
+        <% resident.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :room_id, "部屋" %>
+    <%= f.collection_select :room_id, Room.order(:room_number), :id, :room_number, { prompt: "選択してください" }, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :name, "氏名" %>
+    <%= f.text_field :name, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :phone, "電話番号" %>
+    <%= f.text_field :phone, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :email, "メールアドレス" %>
+    <%= f.email_field :email, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :emergency_contact, "緊急連絡先" %>
+    <%= f.text_field :emergency_contact, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :move_in_date, "入居日" %>
+    <%= f.date_field :move_in_date, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :move_out_date, "退去日" %>
+    <%= f.date_field :move_out_date, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :occupants_count, "同居人数" %>
+    <%= f.number_field :occupants_count, class: "form-control", min: 1 %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :has_pet, "ペット" %>
+    <%= f.select :has_pet, [["なし", false], ["あり", true]], {}, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :pet_details, "ペット詳細（種類など）" %>
+    <%= f.text_field :pet_details, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :notes, "備考" %>
+    <%= f.text_area :notes, class: "form-control" %>
+  </div>
+
+  <div class="action-bar">
+    <%= link_to "キャンセル", residents_path, class: "btn btn-secondary" %>
+    <%= f.submit class: "btn btn-primary", data: { turbo_confirm: "この内容で保存しますか？" } %>
+  </div>
+<% end %>

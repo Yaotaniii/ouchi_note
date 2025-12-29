@@ -1,0 +1,59 @@
+<h1 class="page-title">住民詳細：<%= @resident.name %></h1>
+
+<div class="card">
+  <table class="detail-table">
+    <tr>
+      <th>部屋番号</th>
+      <td><%= link_to @resident.room.room_number, room_path(@resident.room) %></td>
+    </tr>
+    <tr>
+      <th>氏名</th>
+      <td><%= @resident.name %></td>
+    </tr>
+    <tr>
+      <th>電話番号</th>
+      <td><%= @resident.phone.presence || "未登録" %></td>
+    </tr>
+    <tr>
+      <th>メールアドレス</th>
+      <td><%= @resident.email.presence || "未登録" %></td>
+    </tr>
+    <tr>
+      <th>緊急連絡先</th>
+      <td><%= @resident.emergency_contact.presence || "未登録" %></td>
+    </tr>
+    <tr>
+      <th>入居日</th>
+      <td><%= @resident.move_in_date.strftime("%Y/%m/%d") %></td>
+    </tr>
+    <tr>
+      <th>退去日</th>
+      <td><%= @resident.move_out_date&.strftime("%Y/%m/%d") || "入居中" %></td>
+    </tr>
+    <tr>
+      <th>同居人数</th>
+      <td><%= @resident.occupants_count %>人</td>
+    </tr>
+    <tr>
+      <th>ペット</th>
+      <td>
+        <% if @resident.has_pet? %>
+          あり（<%= @resident.pet_details.presence || "詳細なし" %>）
+        <% else %>
+          なし
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <th>備考</th>
+      <td><%= @resident.notes.presence || "なし" %></td>
+    </tr>
+  </table>
+</div>
+
+<div class="action-bar">
+  <%= link_to "一覧に戻る", residents_path, class: "btn btn-secondary" %>
+  <% if current_user.owner? %>
+    <%= link_to "編集", edit_resident_path(@resident), class: "btn btn-primary" %>
+  <% end %>
+</div>

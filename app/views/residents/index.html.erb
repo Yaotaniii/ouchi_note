@@ -1,0 +1,47 @@
+<h1 class="page-title">住民一覧</h1>
+
+<div class="action-bar">
+  <div></div>
+  <div class="action-bar-right">
+    <% if current_user.owner? %>
+      <%= link_to "新規登録", new_resident_path, class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>部屋番号</th>
+      <th>氏名</th>
+      <th>電話番号</th>
+      <th>入居日</th>
+      <th>状態</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @residents.each do |resident| %>
+      <tr>
+        <td><%= resident.room.room_number %></td>
+        <td><%= resident.name %></td>
+        <td><%= resident.phone %></td>
+        <td><%= resident.move_in_date.strftime("%Y/%m/%d") %></td>
+        <td>
+          <% if resident.current? %>
+            <span class="badge badge-occupied">入居中</span>
+          <% else %>
+            <span class="badge badge-vacant">退去済</span>
+          <% end %>
+        </td>
+        <td class="actions">
+          <%= link_to "詳細", resident_path(resident), class: "btn btn-secondary btn-small" %>
+          <% if current_user.owner? %>
+            <%= link_to "編集", edit_resident_path(resident), class: "btn btn-secondary btn-small" %>
+            <%= button_to "削除", resident_path(resident), method: :delete, class: "btn btn-danger btn-small", form_class: "btn-delete-form", data: { turbo_confirm: "本当に削除しますか？" } %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
