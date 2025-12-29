@@ -1,0 +1,46 @@
+<h1 class="page-title">駐車場管理</h1>
+
+<div class="card">
+  <p>全 <%= @parking_spaces.count %> 台分</p>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>区画番号</th>
+      <th>使用区分</th>
+      <th>使用者</th>
+      <th>備考</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @parking_spaces.each do |space| %>
+      <tr>
+        <td><%= space.space_number %></td>
+        <td>
+          <% if space.owner_use? %>
+            <span class="badge badge-occupied">オーナー</span>
+          <% else %>
+            <span class="badge badge-vacant">住民用</span>
+          <% end %>
+        </td>
+        <td>
+          <% if space.owner_use? %>
+            オーナー使用
+          <% elsif space.resident.present? %>
+            <%= space.resident.room.room_number %> - <%= space.resident.name %>
+          <% else %>
+            <span style="color: #999;">空き</span>
+          <% end %>
+        </td>
+        <td><%= space.notes %></td>
+        <td class="actions">
+          <% if current_user.owner? %>
+            <%= link_to "編集", edit_parking_space_path(space), class: "btn btn-secondary btn-small" %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

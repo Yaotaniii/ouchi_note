@@ -329,3 +329,10 @@ textarea.form-control {
   width: auto;
   display: inline-block;
 }
+
+/* ===== フォームヒント ===== */
+.form-hint {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-top: 5px;
+}
