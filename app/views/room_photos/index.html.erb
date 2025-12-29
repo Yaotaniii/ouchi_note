@@ -1,0 +1,80 @@
+<h1 class="page-title">部屋写真：<%= @room.room_number %></h1>
+
+<div class="action-bar">
+  <div></div>
+  <div class="action-bar-right">
+    <% if current_user.owner? %>
+      <%= link_to "入居時写真を追加", new_room_room_photo_path(@room, photo_type: 'move_in'), class: "btn btn-primary" %>
+      <%= link_to "退去時写真を追加", new_room_room_photo_path(@room, photo_type: 'move_out'), class: "btn btn-secondary" %>
+    <% end %>
+  </div>
+</div>
+
+<div class="card">
+  <h2 class="card-title">入居時写真（<%= @move_in_photos.count %>枚）</h2>
+  <% if @move_in_photos.any? %>
+    <div class="photo-grid">
+      <% @move_in_photos.each do |photo| %>
+        <div class="photo-item">
+          <%= image_tag photo.image, class: "photo-image", onclick: "openModal('#{url_for(photo.image)}')", style: "cursor: pointer;" %>
+          <div class="photo-info">
+            <p><%= photo.taken_on&.strftime("%Y/%m/%d") || "日付なし" %></p>
+            <% if current_user.owner? %>
+              <%= button_to "削除", room_room_photo_path(@room, photo), method: :delete, class: "btn btn-danger btn-small", data: { turbo_confirm: "本当に削除しますか？" } %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p>入居時写真はありません</p>
+  <% end %>
+</div>
+
+<div class="card">
+  <h2 class="card-title">退去時写真（<%= @move_out_photos.count %>枚）</h2>
+  <% if @move_out_photos.any? %>
+    <div class="photo-grid">
+      <% @move_out_photos.each do |photo| %>
+        <div class="photo-item">
+          <%= image_tag photo.image, class: "photo-image", onclick: "openModal('#{url_for(photo.image)}')", style: "cursor: pointer;" %>
+          <div class="photo-info">
+            <p><%= photo.taken_on&.strftime("%Y/%m/%d") || "日付なし" %></p>
+            <% if current_user.owner? %>
+              <%= button_to "削除", room_room_photo_path(@room, photo), method: :delete, class: "btn btn-danger btn-small", data: { turbo_confirm: "本当に削除しますか？" } %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p>退去時写真はありません</p>
+  <% end %>
+</div>
+
+<div class="action-bar">
+  <%= link_to "部屋詳細に戻る", room_path(@room), class: "btn btn-secondary" %>
+</div>
+
+<!-- モーダル -->
+<div id="photoModal" class="modal" onclick="closeModal()">
+  <span class="modal-close">&times;</span>
+  <img id="modalImage" class="modal-content">
+</div>
+
+<script>
+  function openModal(imageUrl) {
+    document.getElementById('photoModal').style.display = 'block';
+    document.getElementById('modalImage').src = imageUrl;
+  }
+
+  function closeModal() {
+    document.getElementById('photoModal').style.display = 'none';
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+  });
+</script>

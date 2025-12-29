@@ -28,6 +28,12 @@
       </td>
     </tr>
     <tr>
+      <th>写真</th>
+      <td>
+        <%= link_to "写真を見る（#{@room.room_photos.count}枚）", room_room_photos_path(@room), class: "btn btn-secondary btn-small" %>
+      </td>
+    </tr>
+    <tr>
       <th>備考</th>
       <td><%= @room.notes.presence || "なし" %></td>
     </tr>

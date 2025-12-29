@@ -1,0 +1,2 @@
+module RoomPhotosHelper
+end
