@@ -1,0 +1,27 @@
+databases:
+  - name: ouchi-note-db
+    databaseName: ouchi_note_production
+    user: ouchi_note
+    plan: free
+
+services:
+  - type: web
+    name: ouchi-note
+    runtime: ruby
+    plan: free
+    buildCommand: |
+      bundle install
+      bundle exec rails assets:precompile
+      bundle exec rails db:migrate
+    startCommand: bundle exec puma -C config/puma.rb
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ouchi-note-db
+          property: connectionString
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: SECRET_KEY_BASE
+        generateValue: true
