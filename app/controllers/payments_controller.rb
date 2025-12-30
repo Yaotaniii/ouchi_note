@@ -35,7 +35,8 @@ class PaymentsController < ApplicationController
   def create
     @payment = Payment.new(payment_params)
     if @payment.save
-      redirect_to payments_path(year_month: @payment.year_month), notice: "入金情報を登録しました"
+      log_activity('create', '入金', "#{@payment.resident.name} #{@payment.year_month}")
+      redirect_to payments_path(year_month: @payment.year_month), notice: "入金を登録しました"
     else
       render :new, status: :unprocessable_entity
     end
@@ -46,6 +47,7 @@ class PaymentsController < ApplicationController
 
   def update
     if @payment.update(payment_params)
+      log_activity('update', '入金', "#{@payment.resident.name} #{@payment.year_month}")
       redirect_to payments_path(year_month: @payment.year_month), notice: "入金情報を更新しました"
     else
       render :edit, status: :unprocessable_entity
@@ -54,8 +56,10 @@ class PaymentsController < ApplicationController
 
   def destroy
     year_month = @payment.year_month
+    payment_info = "#{@payment.resident.name} #{@payment.year_month}"
     @payment.destroy
-    redirect_to payments_path(year_month: year_month), notice: "入金情報を削除しました"
+    log_activity('destroy', '入金', payment_info)
+    redirect_to payments_path(year_month: year_month), notice: "入金を削除しました"
   end
 
   private

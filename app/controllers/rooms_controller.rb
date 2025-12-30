@@ -17,7 +17,8 @@ class RoomsController < ApplicationController
   def create
     @room = Room.new(room_params)
     if @room.save
-      redirect_to @room, notice: "部屋を作成しました"
+      log_activity('create', '部屋', @room.room_number)
+      redirect_to @room, notice: "部屋を登録しました"
     else
       render :new, status: :unprocessable_entity
     end
@@ -28,16 +29,20 @@ class RoomsController < ApplicationController
 
   def update
     if @room.update(room_params)
-      redirect_to @room, notice: "部屋を更新しました"
+      log_activity('update', '部屋', @room.room_number)
+      redirect_to @room, notice: "部屋情報を更新しました"
     else
       render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
+    room_number = @room.room_number
     @room.destroy
+    log_activity('destroy', '部屋', room_number)
     redirect_to rooms_path, notice: "部屋を削除しました"
   end
+
 
   private
 

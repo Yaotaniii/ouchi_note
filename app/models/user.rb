@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_many :activity_logs, dependent: :destroy
   devise :database_authenticatable, :recoverable, :rememberable, :validatable
 
   validates :name, presence: true

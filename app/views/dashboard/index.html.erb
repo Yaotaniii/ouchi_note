@@ -157,3 +157,31 @@
     <%= link_to "修繕履歴一覧へ", maintenance_records_path, class: "btn btn-secondary btn-small" %>
   </div>
 <% end %>
+
+<div class="card">
+  <h2 class="card-title">📋 最近の操作履歴</h2>
+  <% if @recent_activities.any? %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>日時</th>
+          <th>ユーザー</th>
+          <th>操作</th>
+          <th>対象</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @recent_activities.each do |activity| %>
+          <tr>
+            <td><%= activity.created_at.strftime("%m/%d %H:%M") %></td>
+            <td><%= activity.user.name %></td>
+            <td><%= activity.action_label %></td>
+            <td><%= activity.target_type %>: <%= activity.target_name %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>操作履歴はありません</p>
+  <% end %>
+</div>

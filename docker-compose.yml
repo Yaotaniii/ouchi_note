@@ -1,25 +1,26 @@
 services:
-  db:
-    image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: ouchi_note_development
-    volumes:
-      - mysql_data:/var/lib/mysql
-    ports:
-      - "3306:3306"
-
   web:
     build: .
-    command: bash -c "rm -f tmp/pids/server.pid && rails server -b 0.0.0.0"
-    volumes:
-      - .:/app
     ports:
       - "3000:3000"
+    volumes:
+      - .:/app
+    environment:
+      - DATABASE_URL=postgres://postgres:password@db:5432/ouchi_note_development
     depends_on:
       - db
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b '0.0.0.0'"
+
+  db:
+    image: postgres:15
     environment:
-      DATABASE_URL: mysql2://root:password@db:3306/ouchi_note_development
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ouchi_note_development
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
 
 volumes:
-  mysql_data:
+  postgres_data:

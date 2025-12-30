@@ -17,8 +17,8 @@ class ResidentsController < ApplicationController
   def create
     @resident = Resident.new(resident_params)
     if @resident.save
-      # 当月の入金レコードを自動作成
       create_initial_payment(@resident)
+      log_activity('create', '入居者', @resident.name)
       redirect_to @resident, notice: "入居者を登録しました"
     else
       render :new, status: :unprocessable_entity
@@ -30,6 +30,7 @@ class ResidentsController < ApplicationController
 
   def update
     if @resident.update(resident_params)
+      log_activity('update', '入居者', @resident.name)
       redirect_to @resident, notice: "入居者情報を更新しました"
     else
       render :edit, status: :unprocessable_entity
@@ -37,7 +38,9 @@ class ResidentsController < ApplicationController
   end
 
   def destroy
+    resident_name = @resident.name
     @resident.destroy
+    log_activity('destroy', '入居者', resident_name)
     redirect_to residents_path, notice: "入居者を削除しました"
   end
 

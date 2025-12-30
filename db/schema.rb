@@ -10,8 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_30_020942) do
-  create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+ActiveRecord::Schema[7.1].define(version: 2025_12_30_024033) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.bigint "record_id", null: false
@@ -21,7 +24,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_30_020942) do
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "active_storage_blobs", force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -33,13 +36,24 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_30_020942) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "active_storage_variant_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "active_storage_variant_records", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "bicycle_registrations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "activity_logs", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "action"
+    t.string "target_type"
+    t.string "target_name"
+    t.text "details"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_activity_logs_on_user_id"
+  end
+
+  create_table "bicycle_registrations", force: :cascade do |t|
     t.bigint "resident_id", null: false
     t.string "registration_number", null: false
     t.datetime "created_at", null: false
@@ -48,7 +62,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_30_020942) do
     t.index ["resident_id"], name: "index_bicycle_registrations_on_resident_id"
   end
 
-  create_table "contracts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "contracts", force: :cascade do |t|
     t.bigint "resident_id", null: false
     t.date "start_date", null: false
     t.date "end_date"
@@ -64,7 +78,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_30_020942) do
     t.index ["resident_id"], name: "index_contracts_on_resident_id"
   end
 
-  create_table "incidents", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "incidents", force: :cascade do |t|
     t.bigint "resident_id", null: false
     t.bigint "room_id"
     t.string "incident_type", default: "other", null: false
@@ -79,7 +93,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_30_020942) do
     t.index ["room_id"], name: "index_incidents_on_room_id"
   end
 
-  create_table "maintenance_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "maintenance_records", force: :cascade do |t|
     t.bigint "room_id", null: false
     t.string "title", null: false
     t.text "description"
@@ -90,7 +104,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_30_020942) do
     t.index ["room_id"], name: "index_maintenance_records_on_room_id"
   end
 
-  create_table "motorcycle_registrations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "motorcycle_registrations", force: :cascade do |t|
     t.bigint "resident_id", null: false
     t.string "registration_number", null: false
     t.datetime "created_at", null: false
@@ -99,7 +113,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_30_020942) do
     t.index ["resident_id"], name: "index_motorcycle_registrations_on_resident_id"
   end
 
-  create_table "occupants", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "occupants", force: :cascade do |t|
     t.bigint "resident_id", null: false
     t.string "name"
     t.string "name_furigana"
@@ -109,7 +123,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_30_020942) do
     t.index ["resident_id"], name: "index_occupants_on_resident_id"
   end
 
-  create_table "parking_spaces", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "parking_spaces", force: :cascade do |t|
     t.string "space_number", null: false
     t.string "user_type", default: "resident", null: false
     t.bigint "resident_id"
@@ -120,7 +134,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_30_020942) do
     t.index ["space_number"], name: "index_parking_spaces_on_space_number", unique: true
   end
 
-  create_table "payments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "payments", force: :cascade do |t|
     t.bigint "resident_id", null: false
     t.string "year_month", null: false
     t.integer "amount", null: false
@@ -133,7 +147,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_30_020942) do
     t.index ["resident_id"], name: "index_payments_on_resident_id"
   end
 
-  create_table "rent_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "rent_histories", force: :cascade do |t|
     t.bigint "room_id", null: false
     t.integer "rent", null: false
     t.date "started_on", null: false
@@ -143,7 +157,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_30_020942) do
     t.index ["room_id"], name: "index_rent_histories_on_room_id"
   end
 
-  create_table "residents", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "residents", force: :cascade do |t|
     t.bigint "room_id", null: false
     t.string "name", null: false
     t.string "phone"
@@ -165,7 +179,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_30_020942) do
     t.index ["room_id"], name: "index_residents_on_room_id"
   end
 
-  create_table "room_photos", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "room_photos", force: :cascade do |t|
     t.bigint "room_id", null: false
     t.string "photo_type", null: false
     t.date "taken_on"
@@ -174,7 +188,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_30_020942) do
     t.index ["room_id"], name: "index_room_photos_on_room_id"
   end
 
-  create_table "room_vacancies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "room_vacancies", force: :cascade do |t|
     t.bigint "room_id", null: false
     t.date "vacant_from", null: false
     t.date "vacant_until"
@@ -183,7 +197,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_30_020942) do
     t.index ["room_id"], name: "index_room_vacancies_on_room_id"
   end
 
-  create_table "rooms", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "rooms", force: :cascade do |t|
     t.string "room_number", null: false
     t.string "floor_plan"
     t.integer "rent"
@@ -195,7 +209,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_30_020942) do
     t.index ["room_number"], name: "index_rooms_on_room_number", unique: true
   end
 
-  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -209,7 +223,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_30_020942) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  create_table "vehicles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "vehicles", force: :cascade do |t|
     t.bigint "resident_id", null: false
     t.string "vehicle_type", null: false
     t.string "make_model"
@@ -221,6 +235,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_30_020942) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "activity_logs", "users"
   add_foreign_key "bicycle_registrations", "residents"
   add_foreign_key "contracts", "residents"
   add_foreign_key "incidents", "residents"
