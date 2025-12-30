@@ -6,10 +6,15 @@ ja:
       submit: "保存"
   devise:
     failure:
+      user:
+        unauthenticated: "ログインが必要です"
+        invalid: "メールアドレスまたはパスワードが正しくありません"
       unauthenticated: "ログインが必要です"
       invalid: "メールアドレスまたはパスワードが正しくありません"
     sessions:
       signed_in: "ログインしました"
       signed_out: "ログアウトしました"
+      new:
+        sign_in: "ログイン"
     registrations:
       signed_up: "アカウントを登録しました"
