@@ -7,6 +7,7 @@ class Resident < ApplicationRecord
   has_many :incidents, dependent: :destroy
   has_many :bicycle_registrations, dependent: :destroy
   has_many :motorcycle_registrations, dependent: :destroy
+  has_many :occupants, dependent: :destroy
 
   validates :name, presence: true
   validates :move_in_date, presence: true

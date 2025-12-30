@@ -12,10 +12,15 @@
     </tr>
     <tr>
       <th>家賃</th>
-      <td>
-        <%= number_with_delimiter(@room.rent) %>円
-        <%= link_to "改定履歴", room_rent_histories_path(@room), class: "btn btn-secondary btn-small", style: "margin-left: 10px;" %>
-      </td>
+      <td><%= number_with_delimiter(@room.rent) %>円</td>
+    </tr>
+    <tr>
+      <th>共益費</th>
+      <td><%= number_with_delimiter(@room.management_fee || 0) %>円</td>
+    </tr>
+    <tr>
+      <th>家賃+共益費</th>
+      <td><strong><%= number_with_delimiter(@room.rent.to_i + @room.management_fee.to_i) %>円</strong></td>
     </tr>
     <tr>
       <th>状態</th>
@@ -31,6 +36,12 @@
       <th>写真</th>
       <td>
         <%= link_to "写真を見る（#{@room.room_photos.count}枚）", room_room_photos_path(@room), class: "btn btn-secondary btn-small" %>
+      </td>
+    </tr>
+    <tr>
+      <th>家賃改定履歴</th>
+      <td>
+        <%= link_to "履歴を見る", room_rent_histories_path(@room), class: "btn btn-secondary btn-small" %>
       </td>
     </tr>
     <tr>

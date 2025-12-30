@@ -12,6 +12,10 @@
       <td><%= @resident.name %></td>
     </tr>
     <tr>
+      <th>ふりがな</th>
+      <td><%= @resident.name_furigana.presence || "未登録" %></td>
+    </tr>
+    <tr>
       <th>電話番号</th>
       <td><%= @resident.phone.presence || "未登録" %></td>
     </tr>
@@ -21,9 +25,17 @@
     </tr>
     <tr>
       <th>緊急連絡先</th>
-      <td><%= @resident.emergency_contact.presence || "未登録" %></td>
+      <td>
+        <% if @resident.emergency_contact.present? %>
+          <%= @resident.emergency_contact %>
+          <% if @resident.emergency_contact_relation.present? %>
+            （<%= @resident.emergency_contact_relation %>）
+          <% end %>
+        <% else %>
+          未登録
+        <% end %>
+      </td>
     </tr>
-    <tr>
       <th>入居日</th>
       <td><%= @resident.move_in_date.strftime("%Y/%m/%d") %></td>
     </tr>
@@ -46,10 +58,72 @@
       </td>
     </tr>
     <tr>
+      <th>駐車代</th>
+      <td><%= @resident.parking_fee.present? ? "#{number_with_delimiter(@resident.parking_fee)}円/月" : "なし" %></td>
+    </tr>
+    <tr>
+      <th>駐輪代</th>
+      <td><%= @resident.bicycle_fee.present? ? "#{number_with_delimiter(@resident.bicycle_fee)}円/月" : "なし" %></td>
+    </tr>
+    <tr>
+      <th>バイク置場代</th>
+      <td><%= @resident.motorcycle_fee.present? ? "#{number_with_delimiter(@resident.motorcycle_fee)}円/月" : "なし" %></td>
+    </tr>
+    <tr>
+      <th>月額合計</th>
+      <td>
+        <strong><%= number_with_delimiter(@resident.room.rent.to_i + @resident.room.management_fee.to_i + @resident.parking_fee.to_i + @resident.bicycle_fee.to_i + @resident.motorcycle_fee.to_i) %>円</strong>
+        <span style="color: #6c757d; font-size: 0.9rem;">
+          （家賃 <%= number_with_delimiter(@resident.room.rent) %>円
+          + 共益費 <%= number_with_delimiter(@resident.room.management_fee || 0) %>円
+          <% if @resident.parking_fee.to_i > 0 %> + 駐車代 <%= number_with_delimiter(@resident.parking_fee) %>円<% end %>
+          <% if @resident.bicycle_fee.to_i > 0 %> + 駐輪代 <%= number_with_delimiter(@resident.bicycle_fee) %>円<% end %>
+          <% if @resident.motorcycle_fee.to_i > 0 %> + バイク代 <%= number_with_delimiter(@resident.motorcycle_fee) %>円<% end %>）
+        </span>
+      </td>
+    </tr>
+    <tr>
       <th>備考</th>
       <td><%= @resident.notes.presence || "なし" %></td>
     </tr>
   </table>
+  <h3 style="margin-top: 20px;">同居人（<%= @resident.occupants.count %>人）</h3>
+  <% if @resident.occupants.any? %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>氏名</th>
+          <th>ふりがな</th>
+          <th>続柄</th>
+          <% if current_user.owner? %>
+            <th>操作</th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @resident.occupants.each do |occupant| %>
+          <tr>
+            <td><%= occupant.name %></td>
+            <td><%= occupant.name_furigana %></td>
+            <td><%= occupant.relation %></td>
+            <% if current_user.owner? %>
+              <td class="actions">
+                <%= button_to "削除", resident_occupant_path(@resident, occupant), method: :delete, class: "btn btn-danger btn-small", data: { turbo_confirm: "本当に削除しますか？" } %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>同居人はいません</p>
+  <% end %>
+
+  <% if current_user.owner? %>
+    <p style="margin-top: 10px;">
+      <%= link_to "同居人を追加", new_resident_occupant_path(@resident), class: "btn btn-primary btn-small" %>
+    </p>
+  <% end %>
 </div>
 
 <div class="card">

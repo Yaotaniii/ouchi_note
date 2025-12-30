@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_29_155603) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_30_020942) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -99,6 +99,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_29_155603) do
     t.index ["resident_id"], name: "index_motorcycle_registrations_on_resident_id"
   end
 
+  create_table "occupants", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "resident_id", null: false
+    t.string "name"
+    t.string "name_furigana"
+    t.string "relation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["resident_id"], name: "index_occupants_on_resident_id"
+  end
+
   create_table "parking_spaces", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "space_number", null: false
     t.string "user_type", default: "resident", null: false
@@ -147,6 +157,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_29_155603) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "parking_fee"
+    t.integer "bicycle_fee"
+    t.integer "motorcycle_fee"
+    t.string "name_furigana"
+    t.string "emergency_contact_relation"
     t.index ["room_id"], name: "index_residents_on_room_id"
   end
 
@@ -176,6 +191,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_29_155603) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "management_fee"
     t.index ["room_number"], name: "index_rooms_on_room_number", unique: true
   end
 
@@ -211,6 +227,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_29_155603) do
   add_foreign_key "incidents", "rooms"
   add_foreign_key "maintenance_records", "rooms"
   add_foreign_key "motorcycle_registrations", "residents"
+  add_foreign_key "occupants", "residents"
   add_foreign_key "parking_spaces", "residents"
   add_foreign_key "payments", "residents"
   add_foreign_key "rent_histories", "rooms"

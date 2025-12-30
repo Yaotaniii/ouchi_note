@@ -21,6 +21,11 @@
   </div>
 
   <div class="form-group">
+    <%= f.label :name_furigana, "ふりがな" %>
+    <%= f.text_field :name_furigana, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
     <%= f.label :phone, "電話番号" %>
     <%= f.text_field :phone, class: "form-control" %>
   </div>
@@ -33,6 +38,11 @@
   <div class="form-group">
     <%= f.label :emergency_contact, "緊急連絡先" %>
     <%= f.text_field :emergency_contact, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :emergency_contact_relation, "緊急連絡先（続柄）" %>
+    <%= f.text_field :emergency_contact_relation, class: "form-control", placeholder: "例：母、父、兄" %>
   </div>
 
   <div class="form-group">
@@ -58,6 +68,21 @@
   <div class="form-group">
     <%= f.label :pet_details, "ペット詳細（種類など）" %>
     <%= f.text_field :pet_details, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :parking_fee, "駐車代（月額）" %>
+    <%= f.number_field :parking_fee, class: "form-control", min: 0 %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :bicycle_fee, "駐輪代（月額）" %>
+    <%= f.number_field :bicycle_fee, class: "form-control", min: 0 %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :motorcycle_fee, "バイク置場代（月額）" %>
+    <%= f.number_field :motorcycle_fee, class: "form-control", min: 0 %>
   </div>
 
   <div class="form-group">

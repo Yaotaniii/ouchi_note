@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  resident: one
+  name: MyString
+  name_furigana: MyString
+  relation: MyString
+
+two:
+  resident: two
+  name: MyString
+  name_furigana: MyString
+  relation: MyString

@@ -4,7 +4,7 @@
   <div></div>
   <div class="action-bar-right">
     <% if current_user.owner? %>
-      <%= link_to "新規作成", new_room_path, class: "btn btn-primary" %>
+      <%= link_to "新規登録", new_room_path, class: "btn btn-primary" %>
     <% end %>
   </div>
 </div>
@@ -15,6 +15,8 @@
       <th>部屋番号</th>
       <th>間取り</th>
       <th>家賃</th>
+      <th>共益費</th>
+      <th>合計</th>
       <th>状態</th>
       <th>操作</th>
     </tr>
@@ -25,6 +27,8 @@
         <td><%= room.room_number %></td>
         <td><%= room.floor_plan %></td>
         <td><%= number_with_delimiter(room.rent) %>円</td>
+        <td><%= number_with_delimiter(room.management_fee || 0) %>円</td>
+        <td><strong><%= number_with_delimiter(room.rent.to_i + room.management_fee.to_i) %>円</strong></td>
         <td>
           <% if room.status == 'occupied' %>
             <span class="badge badge-occupied">入居中</span>

@@ -46,11 +46,7 @@ class ResidentsController < ApplicationController
   end
 
   def resident_params
-    params.require(:resident).permit(
-      :room_id, :name, :phone, :email, :emergency_contact,
-      :move_in_date, :move_out_date, :has_pet, :pet_details,
-      :occupants_count, :notes
-    )
+    params.require(:resident).permit(:room_id, :name, :name_furigana, :phone, :email, :emergency_contact, :emergency_contact_relation, :move_in_date, :move_out_date, :has_pet, :pet_details, :occupants_count, :notes, :parking_fee, :bicycle_fee, :motorcycle_fee)
   end
 
   def authorize_owner!

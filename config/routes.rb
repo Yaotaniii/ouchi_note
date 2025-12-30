@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'occupants/new'
+  get 'occupants/create'
+  get 'occupants/destroy'
   devise_for :users
 
   get "dashboard", to: "dashboard#index"
@@ -12,6 +15,7 @@ Rails.application.routes.draw do
   end
   resources :residents do
     resource :contract, only: [:show, :new, :create, :edit, :update, :destroy]
+    resources :occupants, only: [:new, :create, :destroy]
   end
   resources :payments
   resources :maintenance_records

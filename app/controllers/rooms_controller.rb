@@ -46,7 +46,7 @@ class RoomsController < ApplicationController
   end
 
   def room_params
-    params.require(:room).permit(:room_number, :floor_plan, :rent, :status, :notes)
+    params.require(:room).permit(:room_number, :floor_plan, :rent, :management_fee, :status, :notes)
   end
 
   def authorize_owner!
