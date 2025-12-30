@@ -4,7 +4,18 @@ class RoomsController < ApplicationController
   before_action :authorize_owner!, only: [:new, :create, :edit, :update, :destroy]
 
   def index
-    @rooms = Room.all.order(:room_number)
+    @rooms = Room.all
+
+    # 階数の一覧を取得（部屋番号の1文字目）
+    @floors = Room.pluck(:room_number).map { |n| n[0] }.uniq.sort
+
+    # 階数でフィルター
+    if params[:floor].present?
+      @rooms = @rooms.where("room_number LIKE ?", "#{params[:floor]}%")
+    end
+
+    # ソート（デフォルトは部屋番号順）
+    @rooms = @rooms.order(:room_number)
   end
 
   def show

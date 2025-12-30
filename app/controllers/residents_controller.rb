@@ -4,7 +4,25 @@ class ResidentsController < ApplicationController
   before_action :authorize_owner!, only: [:new, :create, :edit, :update, :destroy]
 
   def index
-    @residents = Resident.includes(:room).order(move_in_date: :desc)
+    @residents = Resident.includes(:room)
+
+    # 階数の一覧を取得
+    @floors = Room.pluck(:room_number).map { |n| n[0] }.uniq.sort
+
+    # 階数でフィルター
+    if params[:floor].present?
+      @residents = @residents.where("rooms.room_number LIKE ?", "#{params[:floor]}%")
+    end
+
+    # 入居状態でフィルター
+    if params[:status] == 'current'
+      @residents = @residents.where(move_out_date: nil)
+    elsif params[:status] == 'moved_out'
+      @residents = @residents.where.not(move_out_date: nil)
+    end
+
+    # 部屋番号順でソート
+    @residents = @residents.order("rooms.room_number")
   end
 
   def show

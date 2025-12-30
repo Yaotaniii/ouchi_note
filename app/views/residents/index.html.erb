@@ -1,7 +1,12 @@
 <h1 class="page-title">入居者一覧</h1>
 
 <div class="action-bar">
-  <div></div>
+    <div class="filter-form">
+      <%= form_tag residents_path, method: :get, class: "filter-inline" do %>
+        <%= select_tag :floor, options_for_select([["全ての階", ""]] + @floors.map { |n| ["#{n}階", n] }, params[:floor]), class: "form-control", onchange: "this.form.submit();" %>
+        <%= select_tag :status, options_for_select([["全て", ""], ["入居中", "current"], ["退去済", "moved_out"]], params[:status]), class: "form-control", onchange: "this.form.submit();" %>
+      <% end %>
+    </div>
   <div class="action-bar-right">
     <% if current_user.owner? %>
       <%= link_to "新規登録", new_resident_path, class: "btn btn-primary" %>
@@ -9,39 +14,43 @@
   </div>
 </div>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>部屋番号</th>
-      <th>氏名</th>
-      <th>電話番号</th>
-      <th>入居日</th>
-      <th>状態</th>
-      <th>操作</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @residents.each do |resident| %>
+<div class="table-wrapper">
+  <table class="table">
+    <thead>
       <tr>
-        <td><%= resident.room.room_number %></td>
-        <td><%= resident.name %></td>
-        <td><%= resident.phone %></td>
-        <td><%= resident.move_in_date.strftime("%Y/%m/%d") %></td>
-        <td>
-          <% if resident.current? %>
-            <span class="badge badge-occupied">入居中</span>
-          <% else %>
-            <span class="badge badge-vacant">退去済</span>
-          <% end %>
-        </td>
-        <td class="actions">
-          <%= link_to "詳細", resident_path(resident), class: "btn btn-secondary btn-small" %>
-          <% if current_user.owner? %>
-            <%= link_to "編集", edit_resident_path(resident), class: "btn btn-secondary btn-small" %>
-            <%= button_to "削除", resident_path(resident), method: :delete, class: "btn btn-danger btn-small", form_class: "btn-delete-form", data: { turbo_confirm: "本当に削除しますか？" } %>
-          <% end %>
-        </td>
+        <th>部屋番号</th>
+        <th>氏名</th>
+        <th>ふりがな</th>
+        <th>電話番号</th>
+        <th>入居日</th>
+        <th>状態</th>
+        <th>操作</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @residents.each do |resident| %>
+        <tr>
+          <td><%= resident.room.room_number %></td>
+          <td><%= resident.name %></td>
+          <td><%= resident.name_furigana %></td>
+          <td><%= resident.phone %></td>
+          <td><%= resident.move_in_date.strftime("%Y/%m/%d") %></td>
+          <td>
+            <% if resident.current? %>
+              <span class="badge badge-occupied">入居中</span>
+            <% else %>
+              <span class="badge badge-vacant">退去済</span>
+            <% end %>
+          </td>
+          <td class="actions">
+            <%= link_to "詳細", resident_path(resident), class: "btn btn-secondary btn-small" %>
+            <% if current_user.owner? %>
+              <%= link_to "編集", edit_resident_path(resident), class: "btn btn-secondary btn-small" %>
+              <%= button_to "削除", resident_path(resident), method: :delete, class: "btn btn-danger btn-small", form_class: "btn-delete-form", data: { turbo_confirm: "本当に削除しますか？" } %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
