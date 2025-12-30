@@ -1,3 +1,14 @@
+# オーナーユーザーを作成（存在しない場合のみ）
+unless User.exists?(email: 'owner@example.com')
+  User.create!(
+    email: 'owner@example.com',
+    password: 'password123',
+    name: 'オーナー太郎',
+    role: 'owner'
+  )
+  puts "オーナーユーザーを作成しました"
+end
+
 # 駐車場の初期データ作成（7台分）
 puts "駐車場データを作成中..."
 
