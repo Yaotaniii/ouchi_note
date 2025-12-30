@@ -22,7 +22,8 @@ class MaintenanceRecordsController < ApplicationController
   def create
     @maintenance_record = MaintenanceRecord.new(maintenance_record_params)
     if @maintenance_record.save
-      redirect_to @maintenance_record, notice: "修繕履歴を登録しました"
+      log_activity('create', '修繕履歴', @maintenance_record.title)
+      redirect_to maintenance_records_path, notice: "修繕履歴を登録しました"
     else
       render :new, status: :unprocessable_entity
     end
@@ -33,14 +34,17 @@ class MaintenanceRecordsController < ApplicationController
 
   def update
     if @maintenance_record.update(maintenance_record_params)
-      redirect_to @maintenance_record, notice: "修繕履歴を更新しました"
+      log_activity('update', '修繕履歴', @maintenance_record.title)
+      redirect_to maintenance_records_path, notice: "修繕履歴を更新しました"
     else
       render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
+    title = @maintenance_record.title
     @maintenance_record.destroy
+    log_activity('destroy', '修繕履歴', title)
     redirect_to maintenance_records_path, notice: "修繕履歴を削除しました"
   end
 

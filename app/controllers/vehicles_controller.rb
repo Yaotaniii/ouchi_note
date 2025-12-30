@@ -19,6 +19,7 @@ class VehiclesController < ApplicationController
   def create
     @vehicle = Vehicle.new(vehicle_params)
     if @vehicle.save
+      log_activity('create', '車両', "#{@vehicle.resident.name} - #{@vehicle.plate_number}")
       redirect_to vehicles_path, notice: "車両を登録しました"
     else
       render :new, status: :unprocessable_entity
@@ -30,6 +31,7 @@ class VehiclesController < ApplicationController
 
   def update
     if @vehicle.update(vehicle_params)
+      log_activity('update', '車両', "#{@vehicle.resident.name} - #{@vehicle.plate_number}")
       redirect_to vehicles_path, notice: "車両情報を更新しました"
     else
       render :edit, status: :unprocessable_entity
@@ -37,7 +39,9 @@ class VehiclesController < ApplicationController
   end
 
   def destroy
+    info = "#{@vehicle.resident.name} - #{@vehicle.plate_number}"
     @vehicle.destroy
+    log_activity('destroy', '車両', info)
     redirect_to vehicles_path, notice: "車両を削除しました"
   end
 

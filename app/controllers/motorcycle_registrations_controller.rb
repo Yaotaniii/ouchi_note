@@ -14,7 +14,8 @@ class MotorcycleRegistrationsController < ApplicationController
   def create
     @motorcycle_registration = MotorcycleRegistration.new(motorcycle_registration_params)
     if @motorcycle_registration.save
-      redirect_to motorcycle_registrations_path, notice: "バイク置き場登録を追加しました"
+      log_activity('create', 'バイク置場', "#{@motorcycle_registration.resident.name} - #{@motorcycle_registration.registration_number}")
+      redirect_to motorcycle_registrations_path, notice: "バイク置場登録を追加しました"
     else
       render :new, status: :unprocessable_entity
     end
@@ -25,15 +26,18 @@ class MotorcycleRegistrationsController < ApplicationController
 
   def update
     if @motorcycle_registration.update(motorcycle_registration_params)
-      redirect_to motorcycle_registrations_path, notice: "バイク置き場登録を更新しました"
+      log_activity('update', 'バイク置場', "#{@motorcycle_registration.resident.name} - #{@motorcycle_registration.registration_number}")
+      redirect_to motorcycle_registrations_path, notice: "バイク置場登録を更新しました"
     else
       render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
+    info = "#{@motorcycle_registration.resident.name} - #{@motorcycle_registration.registration_number}"
     @motorcycle_registration.destroy
-    redirect_to motorcycle_registrations_path, notice: "バイク置き場登録を削除しました"
+    log_activity('destroy', 'バイク置場', info)
+    redirect_to motorcycle_registrations_path, notice: "バイク置場登録を削除しました"
   end
 
   private

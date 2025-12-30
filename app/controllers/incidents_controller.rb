@@ -22,6 +22,7 @@ class IncidentsController < ApplicationController
   def create
     @incident = Incident.new(incident_params)
     if @incident.save
+      log_activity('create', '対応履歴', @incident.title)
       redirect_to @incident, notice: "対応履歴を登録しました"
     else
       render :new, status: :unprocessable_entity
@@ -33,6 +34,7 @@ class IncidentsController < ApplicationController
 
   def update
     if @incident.update(incident_params)
+      log_activity('update', '対応履歴', @incident.title)
       redirect_to @incident, notice: "対応履歴を更新しました"
     else
       render :edit, status: :unprocessable_entity
@@ -40,7 +42,9 @@ class IncidentsController < ApplicationController
   end
 
   def destroy
+    title = @incident.title
     @incident.destroy
+    log_activity('destroy', '対応履歴', title)
     redirect_to incidents_path, notice: "対応履歴を削除しました"
   end
 

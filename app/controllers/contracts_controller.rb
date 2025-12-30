@@ -14,7 +14,8 @@ class ContractsController < ApplicationController
   def create
     @contract = @resident.build_contract(contract_params)
     if @contract.save
-      redirect_to resident_path(@resident), notice: "契約情報を登録しました"
+      log_activity('create', '契約', "#{@resident.name}さんの契約")
+      redirect_to resident_contract_path(@resident), notice: "契約情報を登録しました"
     else
       render :new, status: :unprocessable_entity
     end
@@ -25,7 +26,8 @@ class ContractsController < ApplicationController
 
   def update
     if @contract.update(contract_params)
-      redirect_to resident_path(@resident), notice: "契約情報を更新しました"
+      log_activity('update', '契約', "#{@resident.name}さんの契約")
+      redirect_to resident_contract_path(@resident), notice: "契約情報を更新しました"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -33,6 +35,7 @@ class ContractsController < ApplicationController
 
   def destroy
     @contract.destroy
+    log_activity('destroy', '契約', "#{@resident.name}さんの契約")
     redirect_to resident_path(@resident), notice: "契約情報を削除しました"
   end
 

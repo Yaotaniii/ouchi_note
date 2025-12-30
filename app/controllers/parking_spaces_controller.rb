@@ -12,6 +12,7 @@ class ParkingSpacesController < ApplicationController
 
   def update
     if @parking_space.update(parking_space_params)
+      log_activity('update', '駐車場', @parking_space.space_number)
       redirect_to parking_spaces_path, notice: "駐車場情報を更新しました"
     else
       render :edit, status: :unprocessable_entity

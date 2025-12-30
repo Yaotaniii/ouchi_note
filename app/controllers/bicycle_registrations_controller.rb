@@ -14,6 +14,7 @@ class BicycleRegistrationsController < ApplicationController
   def create
     @bicycle_registration = BicycleRegistration.new(bicycle_registration_params)
     if @bicycle_registration.save
+      log_activity('create', '駐輪場', "#{@bicycle_registration.resident.name} - #{@bicycle_registration.registration_number}")
       redirect_to bicycle_registrations_path, notice: "駐輪場登録を追加しました"
     else
       render :new, status: :unprocessable_entity
@@ -25,6 +26,7 @@ class BicycleRegistrationsController < ApplicationController
 
   def update
     if @bicycle_registration.update(bicycle_registration_params)
+      log_activity('update', '駐輪場', "#{@bicycle_registration.resident.name} - #{@bicycle_registration.registration_number}")
       redirect_to bicycle_registrations_path, notice: "駐輪場登録を更新しました"
     else
       render :edit, status: :unprocessable_entity
@@ -32,7 +34,9 @@ class BicycleRegistrationsController < ApplicationController
   end
 
   def destroy
+    info = "#{@bicycle_registration.resident.name} - #{@bicycle_registration.registration_number}"
     @bicycle_registration.destroy
+    log_activity('destroy', '駐輪場', info)
     redirect_to bicycle_registrations_path, notice: "駐輪場登録を削除しました"
   end
 

@@ -14,6 +14,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
+      log_activity('create', 'ユーザー', @user.name)
       redirect_to users_path, notice: "ユーザーを作成しました"
     else
       render :new, status: :unprocessable_entity
@@ -30,6 +31,7 @@ class UsersController < ApplicationController
     end
 
     if @user.update(user_params)
+      log_activity('update', 'ユーザー', @user.name)
       redirect_to users_path, notice: "ユーザーを更新しました"
     else
       render :edit, status: :unprocessable_entity
@@ -40,7 +42,9 @@ class UsersController < ApplicationController
     if @user == current_user
       redirect_to users_path, alert: "自分自身は削除できません"
     else
+      user_name = @user.name
       @user.destroy
+      log_activity('destroy', 'ユーザー', user_name)
       redirect_to users_path, notice: "ユーザーを削除しました"
     end
   end
