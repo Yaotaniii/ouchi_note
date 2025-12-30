@@ -1,4 +1,4 @@
-# おうちノート（Ouchi Note）
+# おうちノート
 
 マンション管理アプリ - 入居者情報・入金・修繕履歴などを一元管理
 
@@ -8,9 +8,11 @@
 |------|------|
 | 目的 | 入居者情報・入金・修繕履歴などを一元管理 |
 | 利用者 | オーナー、管理会社スタッフ |
-| 技術 | Ruby on Rails 7 / MySQL / Docker |
+| 技術 | Ruby on Rails 7 / PostgreSQL / Docker |
+| 本番環境 | Render（Web + DB） |
+| 画像保存 | Cloudinary |
 
-## セットアップ
+## セットアップ（ローカル開発）
 
 ### 必要な環境
 
@@ -29,7 +31,7 @@ docker compose build
 # データベースを作成
 docker compose run --rm web rails db:create db:migrate
 
-# 初期データを投入（駐車場など）
+# 初期データを投入
 docker compose run --rm web rails db:seed
 
 # サーバーを起動
@@ -48,56 +50,52 @@ docker compose up
 
 | 権限 | できること |
 |------|------------|
-| オーナー | すべての閲覧・作成・編集・削除 |
+| オーナー | すべての閲覧・作成・編集・削除、ユーザー管理 |
 | スタッフ | すべての閲覧のみ |
 
 ## 機能一覧
 
 ### 基本機能
 
-| 機能 | 説明 | 状態 |
-|------|------|------|
-| ユーザー認証 | オーナー/スタッフのログイン、権限管理 | ✅ 完成 |
-| ダッシュボード | 入居状況、滞納アラート、未解決対応など一覧 | ✅ 完成 |
-| 部屋管理 | 部屋番号、間取り、家賃などの基本情報 | ✅ 完成 |
-| 入居者管理 | 氏名、連絡先、入退去日、同居人数など | ✅ 完成 |
-| 契約管理 | 契約期間、保証人情報、敷金・礼金 | ✅ 完成 |
-| 入金管理 | 月ごとの入金状況、履歴一覧 | ✅ 完成 |
-| 修繕履歴管理 | 部屋ごとの修繕・メンテナンス記録 | ✅ 完成 |
-| 駐車場管理 | 区画の使用状況（オーナー/入居者） | ✅ 完成 |
-| 駐輪場管理 | 駐輪証番号と入居者の紐付け | ✅ 完成 |
-| バイク置き場管理 | 駐輪証番号と入居者の紐付け | ✅ 完成 |
-| 車両情報 | 車/バイクの種類、ナンバー | ✅ 完成 |
-| 対応履歴 | クレーム・トラブルの対応記録 | ✅ 完成 |
-| 家賃改定履歴 | 部屋の家賃変更履歴 | ✅ 完成 |
-| 部屋写真管理 | 入居時・退去時の写真（モーダル拡大表示） | ✅ 完成 |
-| 使い方ガイド | アプリの使い方ヘルプページ | ✅ 完成 |
-| ユーザー管理 | オーナーによるユーザーの作成・編集・削除 | ✅ 完成 |
-
-### 未実装
-
 | 機能 | 説明 |
 |------|------|
-| 空室期間記録 | 部屋ごとの空室期間を自動計算・記録 |
-| 収支サマリー | 月ごと・年ごとの収入と支出の集計 |
+| ユーザー認証 | オーナー/スタッフのログイン、権限管理 |
+| ダッシュボード | 入居状況、滞納アラート、未解決対応、操作履歴など一覧 |
+| 部屋管理 | 部屋番号、間取り、家賃、共益費などの基本情報 |
+| 入居者管理 | 氏名、ふりがな、連絡先、緊急連絡先（続柄）、同居人リスト |
+| 契約管理 | 契約期間、保証人情報、敷金・礼金 |
+| 入金管理 | 月ごとの入金状況、入居者登録時に自動作成 |
+| 修繕履歴管理 | 部屋ごとの修繕・メンテナンス記録 |
+| 駐車場管理 | 区画の使用状況（オーナー/入居者）、視覚的マップ表示 |
+| 駐輪場管理 | 駐輪証番号と入居者の紐付け |
+| バイク置場管理 | 駐輪証番号と入居者の紐付け |
+| 車両情報 | 車/バイクの種類、ナンバー |
+| 対応履歴 | クレーム・トラブルの対応記録 |
+| 家賃改定履歴 | 部屋の家賃変更履歴 |
+| 部屋写真管理 | 入居時・退去時の写真（Cloudinaryで保存） |
+| 駐車代・駐輪代 | 入居者ごとの駐車代・駐輪代・バイク置場代 |
+| 操作履歴 | 誰がいつ何を変更したかを自動記録 |
+| ユーザー管理 | オーナーによるユーザーの作成・編集・削除 |
+| 使い方ガイド | アプリの使い方ヘルプページ |
+| スマホ対応 | レスポンシブデザイン、ハンバーガーメニュー |
 
 ## 画面一覧
 
 | 画面 | 説明 |
 |------|------|
 | ログイン | メールアドレス＋パスワード |
-| ダッシュボード | 入居状況、滞納アラート、未解決対応、駐車場状況など |
+| ダッシュボード | 入居状況、滞納アラート、未解決対応、操作履歴など |
 | 部屋一覧/詳細 | 部屋情報＋家賃改定履歴＋写真 |
-| 入居者一覧/詳細 | 入居者情報＋契約情報 |
+| 入居者一覧/詳細 | 入居者情報＋契約情報＋同居人リスト＋月額合計 |
 | 入金管理 | 月別の入金状況一覧、登録画面 |
 | 修繕履歴 | 部屋ごとの履歴一覧、登録画面 |
-| 駐車場一覧 | 区画の使用状況 |
+| 駐車場一覧 | 区画の使用状況（マップ表示） |
 | 駐輪場一覧 | 駐輪証ごとの割り当て状況 |
 | バイク置場一覧 | 駐輪証ごとの割り当て状況 |
 | 車両一覧 | 車・バイクの情報 |
 | 対応履歴一覧/詳細 | クレーム・トラブルの記録 |
-| 使い方ガイド | アプリの使い方 |
 | ユーザー管理 | ユーザーの一覧・作成・編集・削除（オーナーのみ） |
+| 使い方ガイド | アプリの使い方 |
 
 ## データベース設計
 
@@ -118,7 +116,8 @@ docker compose up
 | id | bigint | 主キー |
 | room_number | string | 部屋番号 |
 | floor_plan | string | 間取り |
-| rent | integer | 現在の家賃 |
+| rent | integer | 家賃 |
+| management_fee | integer | 共益費 |
 | status | string | vacant / occupied |
 | notes | text | 備考 |
 
@@ -129,15 +128,30 @@ docker compose up
 | id | bigint | 主キー |
 | room_id | bigint | 外部キー |
 | name | string | 氏名 |
+| name_furigana | string | ふりがな |
 | phone | string | 電話番号 |
 | email | string | メールアドレス |
 | emergency_contact | string | 緊急連絡先 |
+| emergency_contact_relation | string | 緊急連絡先（続柄） |
 | move_in_date | date | 入居日 |
 | move_out_date | date | 退去日 |
 | has_pet | boolean | ペット有無 |
 | pet_details | string | ペット詳細 |
 | occupants_count | integer | 同居人数 |
+| parking_fee | integer | 駐車代 |
+| bicycle_fee | integer | 駐輪代 |
+| motorcycle_fee | integer | バイク置場代 |
 | notes | text | 備考 |
+
+### occupants（同居人）
+
+| カラム | 型 | 説明 |
+|--------|-----|------|
+| id | bigint | 主キー |
+| resident_id | bigint | 外部キー |
+| name | string | 氏名 |
+| name_furigana | string | ふりがな |
+| relation | string | 続柄 |
 
 ### contracts（契約情報）
 
@@ -167,84 +181,35 @@ docker compose up
 | status | string | paid / unpaid |
 | notes | text | 備考 |
 
-### maintenance_records（修繕履歴）
+### activity_logs（操作履歴）
 
 | カラム | 型 | 説明 |
 |--------|-----|------|
 | id | bigint | 主キー |
-| room_id | bigint | 外部キー |
-| title | string | タイトル |
-| description | text | 詳細 |
-| performed_on | date | 実施日 |
-| cost | integer | 費用 |
+| user_id | bigint | 外部キー |
+| action | string | create / update / destroy |
+| target_type | string | 対象種別（部屋、入居者など） |
+| target_name | string | 対象名 |
+| details | text | 詳細 |
 
-### rent_histories（家賃改定履歴）
+## 本番環境（Render）
 
-| カラム | 型 | 説明 |
-|--------|-----|------|
-| id | bigint | 主キー |
-| room_id | bigint | 外部キー |
-| rent | integer | 家賃 |
-| started_on | date | 適用開始日 |
-| notes | text | 備考 |
+### デプロイ
 
-### room_photos（部屋写真）
+GitHubにプッシュすると自動デプロイされます。
 
-| カラム | 型 | 説明 |
-|--------|-----|------|
-| id | bigint | 主キー |
-| room_id | bigint | 外部キー |
-| photo_type | string | move_in / move_out |
-| taken_on | date | 撮影日 |
+### 環境変数（Render）
 
-※ 画像は Active Storage を使用
+| 変数名 | 説明 |
+|--------|------|
+| DATABASE_URL | PostgreSQL接続URL |
+| RAILS_ENV | production |
+| RAILS_MASTER_KEY | config/master.keyの内容 |
+| CLOUDINARY_CLOUD_NAME | Cloudinaryのクラウド名 |
+| CLOUDINARY_API_KEY | CloudinaryのAPIキー |
+| CLOUDINARY_API_SECRET | CloudinaryのAPIシークレット |
 
-### parking_spaces（駐車場）
-
-| カラム | 型 | 説明 |
-|--------|-----|------|
-| id | bigint | 主キー |
-| space_number | string | 区画番号 |
-| user_type | string | resident / owner |
-| resident_id | bigint | 外部キー（nullable） |
-| notes | text | 備考 |
-
-### bicycle_registrations（駐輪場登録）
-
-| カラム | 型 | 説明 |
-|--------|-----|------|
-| id | bigint | 主キー |
-| resident_id | bigint | 外部キー |
-| registration_number | string | 駐輪証番号 |
-
-### motorcycle_registrations（バイク置き場登録）
-
-| カラム | 型 | 説明 |
-|--------|-----|------|
-| id | bigint | 主キー |
-| resident_id | bigint | 外部キー |
-| registration_number | string | 駐輪証番号 |
-
-### vehicles（車両）
-
-| カラム | 型 | 説明 |
-|--------|-----|------|
-| id | bigint | 主キー |
-| resident_id | bigint | 外部キー |
-| vehicle_type | string | car / motorcycle |
-| make_model | string | 車種 |
-| plate_number | string | ナンバー |
-
-### incidents（対応履歴）
-
-| カラム | 型 | 説明 |
-|--------|-----|------|
-| id | bigint | 主キー |
-| resident_id | bigint | 外部キー |
-| room_id | bigint | 外部キー（nullable） |
-| incident_type | string | complaint / trouble / inquiry / other |
-| title | string | タイトル |
-| description | text | 詳細 |
-| occurred_on | date | 発生日 |
-| resolved_on | date | 解決日（nullable） |
-| status | string | open / resolved |
+## テスト
+```bash
+docker compose run --rm web rails test test/models/
+```
