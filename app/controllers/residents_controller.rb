@@ -17,6 +17,8 @@ class ResidentsController < ApplicationController
   def create
     @resident = Resident.new(resident_params)
     if @resident.save
+      # 当月の入金レコードを自動作成
+      create_initial_payment(@resident)
       redirect_to @resident, notice: "入居者を登録しました"
     else
       render :new, status: :unprocessable_entity
@@ -53,5 +55,18 @@ class ResidentsController < ApplicationController
     unless current_user.owner?
       redirect_to residents_path, alert: "この操作はオーナーのみ可能です"
     end
+  end
+
+  def create_initial_payment(resident)
+    year_month = Date.today.strftime("%Y-%m")
+    room = resident.room
+    amount = room.rent.to_i + room.management_fee.to_i + resident.parking_fee.to_i + resident.bicycle_fee.to_i + resident.motorcycle_fee.to_i
+    
+    Payment.create(
+      resident: resident,
+      year_month: year_month,
+      amount: amount,
+      status: 'unpaid'
+    )
   end
 end
