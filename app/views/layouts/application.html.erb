@@ -14,10 +14,15 @@
     <% if user_signed_in? %>
       <header class="header">
         <h1>🏠 おうちノート</h1>
-        <nav class="header-nav">
+        <button class="menu-toggle" onclick="toggleMenu()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <nav class="header-nav" id="header-nav">
           <%= link_to "ダッシュボード", dashboard_path %>
 
-          <div class="dropdown">
+          <div class="dropdown" onclick="toggleDropdown(this)">
             <span class="dropdown-toggle">物件管理</span>
             <div class="dropdown-menu">
               <%= link_to "部屋一覧", rooms_path %>
@@ -27,7 +32,7 @@
             </div>
           </div>
 
-          <div class="dropdown">
+          <div class="dropdown" onclick="toggleDropdown(this)">
             <span class="dropdown-toggle">駐車・駐輪</span>
             <div class="dropdown-menu">
               <%= link_to "駐車場", parking_spaces_path %>
@@ -40,7 +45,7 @@
           <%= link_to "対応履歴", incidents_path %>
           <%= link_to "使い方", help_path %>
 
-          <div class="dropdown">
+          <div class="dropdown" onclick="toggleDropdown(this)">
             <span class="dropdown-toggle"><%= current_user.name %>さん</span>
             <div class="dropdown-menu dropdown-menu-right">
               <span class="dropdown-item-text"><%= current_user.owner? ? 'オーナー' : 'スタッフ' %></span>
@@ -73,5 +78,29 @@
 
       <%= yield %>
     <% end %>
+
+    <script>
+      function toggleMenu() {
+        const nav = document.getElementById('header-nav');
+        const toggle = document.querySelector('.menu-toggle');
+        nav.classList.toggle('active');
+        toggle.classList.toggle('active');
+      }
+
+      function toggleDropdown(element) {
+        if (window.innerWidth <= 768) {
+          element.classList.toggle('active');
+        }
+      }
+
+      // 画面リサイズ時にメニューをリセット
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+          document.getElementById('header-nav')?.classList.remove('active');
+          document.querySelector('.menu-toggle')?.classList.remove('active');
+          document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('active'));
+        }
+      });
+    </script>
   </body>
 </html>

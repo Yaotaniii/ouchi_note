@@ -716,3 +716,326 @@ textarea.form-control {
   padding: 12px;
   font-size: 1.1rem;
 }
+
+/* ===== ハンバーガーメニュー（PC時は非表示） ===== */
+.menu-toggle {
+  display: none;
+}
+
+/* ===== レスポンシブ対応 ===== */
+
+/* テーブルを横スクロール可能に */
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* スマホ用スタイル（768px以下） */
+@media screen and (max-width: 768px) {
+  /* ヘッダー */
+  .header {
+    flex-direction: column;
+    padding: 10px 15px;
+  }
+
+  .header h1 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+
+  .header-nav {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    gap: 0;
+  }
+
+  .header-nav.active {
+    display: flex;
+  }
+
+  .header-nav > a,
+  .header-nav > .dropdown {
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100%;
+  }
+
+  .header-nav > a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  /* ドロップダウンメニュー */
+  .dropdown {
+    position: relative;
+  }
+
+  .dropdown-toggle {
+    display: block;
+    padding: 12px 15px;
+    width: 100%;
+  }
+
+  .dropdown-menu {
+    position: static;
+    box-shadow: none;
+    background-color: rgba(0, 0, 0, 0.1);
+    display: none;
+    min-width: 100%;
+  }
+
+  .dropdown.active .dropdown-menu {
+    display: block;
+  }
+
+  .dropdown-menu a {
+    padding: 12px 30px;
+  }
+
+  /* ハンバーガーメニュー */
+  .menu-toggle {
+    display: block;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    z-index: 1001;
+  }
+
+  .menu-toggle span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 5px 0;
+    transition: 0.3s;
+    border-radius: 2px;
+  }
+
+  .menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+  }
+
+  /* コンテナ */
+  .container {
+    padding: 15px;
+  }
+
+  /* ページタイトル */
+  .page-title {
+    font-size: 1.3rem;
+  }
+
+  /* カード */
+  .card {
+    padding: 15px;
+  }
+
+  /* アクションバー */
+  .action-bar {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .action-bar-right {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .action-bar .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* ボタン */
+  .btn {
+    padding: 12px 15px;
+    font-size: 0.95rem;
+  }
+
+  .btn-small {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+
+  /* テーブル */
+  .table {
+    font-size: 0.85rem;
+  }
+
+  .table th,
+  .table td {
+    padding: 10px 8px;
+    white-space: nowrap;
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .actions .btn {
+    width: 100%;
+  }
+
+  .btn-delete-form {
+    width: 100%;
+  }
+
+  .btn-delete-form .btn {
+    width: 100%;
+  }
+
+  /* 詳細テーブル */
+  .detail-table th {
+    width: 100px;
+    font-size: 0.85rem;
+  }
+
+  .detail-table td {
+    font-size: 0.9rem;
+  }
+
+  /* フォーム */
+  .form-control {
+    font-size: 16px; /* iOSでズームを防ぐ */
+  }
+
+  /* ダッシュボードカード */
+  .dashboard-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .dashboard-card {
+    padding: 15px 10px;
+  }
+
+  .dashboard-card .number {
+    font-size: 1.8rem;
+  }
+
+  .dashboard-card .label {
+    font-size: 0.8rem;
+  }
+
+  /* 駐車場マップ */
+  .parking-map {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .parking-space {
+    padding: 10px;
+  }
+
+  /* 写真グリッド */
+  .photo-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  /* ログイン画面 */
+  .login-card {
+    padding: 25px;
+    margin: 10px;
+  }
+
+  .login-header h1 {
+    font-size: 1.5rem;
+  }
+
+  /* ヘルプページ */
+  .help-table th {
+    width: 80px;
+  }
+
+  /* 凡例 */
+  .parking-legend {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* モーダル */
+  .modal-content {
+    max-width: 95%;
+    max-height: 80%;
+  }
+
+  .modal-close {
+    top: 10px;
+    right: 15px;
+    font-size: 30px;
+  }
+
+  /* フィルターフォーム */
+  .filter-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-form select {
+    width: 100%;
+  }
+
+  /* 月ナビゲーション */
+  .month-nav {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+}
+
+/* さらに小さい画面（480px以下） */
+@media screen and (max-width: 480px) {
+  .dashboard-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .parking-map {
+    grid-template-columns: 1fr;
+  }
+
+  .photo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-table,
+  .detail-table tbody,
+  .detail-table tr,
+  .detail-table th,
+  .detail-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .detail-table tr {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 10px;
+  }
+
+  .detail-table th {
+    background-color: #f8f9fa;
+    padding: 8px 10px;
+    border-bottom: none;
+  }
+
+  .detail-table td {
+    padding: 8px 10px;
+  }
+}
